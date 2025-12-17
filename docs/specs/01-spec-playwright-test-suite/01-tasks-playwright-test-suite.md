@@ -50,7 +50,7 @@ This task list breaks down the implementation of a comprehensive Playwright test
 - [x] 2.9 Create page object tests to verify functionality
 - [x] 2.10 Add screenshot and debugging capabilities to page objects
 
-### [ ] 3.0 Owner Management Workflow Tests
+### [x] 3.0 Owner Management Workflow Tests
 
 #### 3.0 Proof Artifact(s)
 
@@ -62,16 +62,16 @@ This task list breaks down the implementation of a comprehensive Playwright test
 
 #### 3.0 Tasks
 
-- [ ] 3.1 Create test data factory for owner information
-- [ ] 3.2 Implement owner search functionality tests
-- [ ] 3.3 Create owner registration workflow tests
-- [ ] 3.4 Implement owner information editing tests
-- [ ] 3.5 Add owner details viewing tests
-- [ ] 3.6 Create form validation tests for owner inputs
-- [ ] 3.7 Implement owner-pet relationship tests
-- [ ] 3.8 Add error handling and edge case tests
-- [ ] 3.9 Create responsive design tests for owner forms
-- [ ] 3.10 Implement performance and timing tests for owner workflows
+- [x] 3.1 Create test data factory for owner information
+- [x] 3.2 Implement owner search functionality tests
+- [x] 3.3 Create owner registration workflow tests
+- [x] 3.4 Implement owner information editing tests
+- [x] 3.5 Add owner details viewing tests
+- [x] 3.6 Create form validation tests for owner inputs
+- [x] 3.7 Implement owner-pet relationship tests
+- [x] 3.8 Add error handling and edge case tests
+- [x] 3.9 Create responsive design tests for owner forms
+- [x] 3.10 Implement performance and timing tests for owner workflows
 
 ### [ ] 4.0 Pet Management Workflow Tests
 
