@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@fixtures/base-test';
 
-import { HomePage } from './home-page';
-import { OwnerPage } from './owner-page';
-import { VetPage } from './vet-page';
+import { HomePage } from '@pages/home-page';
+import { OwnerPage } from '@pages/owner-page';
+import { VetPage } from '@pages/vet-page';
 
 test('BasePage navigation links route to expected pages', async ({ page }) => {
   const homePage = new HomePage(page);

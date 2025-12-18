@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@fixtures/base-test';
 
 import { OwnerPage } from '@pages/owner-page';
 import { createPet } from '@utils/pet-factory';

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@fixtures/base-test';
 import { createRequire } from 'node:module';
 
 type AxeImpact = 'minor' | 'moderate' | 'serious' | 'critical' | null;
@@ -42,5 +42,12 @@ test('Home page accessibility scan (non-blocking)', async ({ page }) => {
     console.warn(
       `Accessibility violations detected\ncritical=${critical.length}, serious=${serious.length}\n${debugMessage}`
     );
+
+    if (process.env.PW_A11Y_FAIL_ON_CRITICAL === 'true') {
+      expect(
+        critical.length,
+        `Critical accessibility violations must be fixed\n${debugMessage}`
+      ).toBe(0);
+    }
   }
 });
