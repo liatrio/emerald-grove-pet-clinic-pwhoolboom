@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base-test';
 
-import { OwnerPage } from './owner-page';
+import { OwnerPage } from '../pages/owner-page';
 
-test('OwnerPage can search owners by last name and open owner details', async ({ page }) => {
+test('OwnerPage can search owners by last name and open owner details', async ({ page }: { page: any }) => {
   const ownerPage = new OwnerPage(page);
 
   await ownerPage.openFindOwners();
