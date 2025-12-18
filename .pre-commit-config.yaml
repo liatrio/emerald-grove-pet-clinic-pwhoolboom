@@ -63,7 +63,7 @@ repos:
     hooks:
       - id: gitlint
         description: Lints commit messages
-        args: ["--msg-filename", ".git/COMMIT_EDITMSG"]
+        stages: [commit-msg]
 
   # Spring Boot specific hooks
   - repo: local
