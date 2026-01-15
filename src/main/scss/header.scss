@@ -1,6 +1,6 @@
 .navbar {
-  border-top: 4px solid #6db33f;
-  background-color: #34302d;
+  border-top: 4px solid #24AE1D;
+  background-color: #111111;
   margin-bottom: 0px;
   border-bottom: 0;
   border-left: 0;
@@ -8,10 +8,11 @@
 }
 
 .navbar a.navbar-brand {
-  background: url("../images/spring-logo-dataflow.png") -1px -1px no-repeat;
+  background: url("../images/liatrio-logo-reverse.svg") left center no-repeat;
+  background-size: contain;
   margin: 12px 0 6px;
-  width: 229px;
-  height: 46px;
+  width: 170px;
+  height: 32px;
   display: inline-block;
   text-decoration: none;
   padding: 0;
@@ -19,9 +20,10 @@
 
 .navbar a.navbar-brand span {
   display: block;
-  width: 229px;
-  height: 46px;
-  background: url("../images/spring-logo-dataflow.png") -1px -48px no-repeat;
+  width: 170px;
+  height: 32px;
+  background: url("../images/liatrio-logo-reverse.svg") left center no-repeat;
+  background-size: contain;
   opacity: 0;
   -moz-transition: opacity 0.12s ease-in-out;
   -webkit-transition: opacity 0.12s ease-in-out;
@@ -33,7 +35,8 @@
 }
 
 .navbar li > a, .navbar-text {
-  font-family: "montserratregular", sans-serif;
+  font-family: "DM Sans", sans-serif;
+  color: #ffffff;
   text-shadow: none;
   font-size: 14px;
 

@@ -16,6 +16,7 @@
    * Copyright 2011-2025 The Bootstrap Authors
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
 :root,
 [data-bs-theme="light"] {
   --bs-blue: #0d6efd;
@@ -83,15 +84,15 @@
   --bs-dark-border-subtle: #adb5bd;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-font-sans-serif: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
   --bs-body-font-size: 1rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
-  --bs-body-color: #212529;
-  --bs-body-color-rgb: 33, 37, 41;
+  --bs-body-color: #111111;
+  --bs-body-color-rgb: 17, 17, 17;
   --bs-body-bg: #fff;
   --bs-body-bg-rgb: 255, 255, 255;
   --bs-emphasis-color: #000;
@@ -105,11 +106,11 @@
   --bs-tertiary-bg: #f8f9fa;
   --bs-tertiary-bg-rgb: 248, 249, 250;
   --bs-heading-color: inherit;
-  --bs-link-color: #0d6efd;
-  --bs-link-color-rgb: 13, 110, 253;
+  --bs-link-color: #24AE1D;
+  --bs-link-color-rgb: 36, 174, 29;
   --bs-link-decoration: underline;
-  --bs-link-hover-color: #0a58ca;
-  --bs-link-hover-color-rgb: 10, 88, 202;
+  --bs-link-hover-color: #24AE1D;
+  --bs-link-hover-color-rgb: 36, 174, 29;
   --bs-code-color: #d63384;
   --bs-highlight-color: #212529;
   --bs-highlight-bg: #fff3cd;
@@ -9274,31 +9275,31 @@ textarea.form-control-lg {
     display: none !important; } }
 
 .table > thead > tr > th {
-  background-color: #3c3834;
-  color: #f1f1f1; }
+  background-color: #1e1e1e;
+  color: #ffffff; }
 
 .table-filter {
-  background-color: #34302D;
+  background-color: #111111;
   padding: 9px 12px; }
 
 .nav > li > a {
-  color: #838789; }
+  color: #666666; }
 
 .btn-primary {
   margin-top: 12px;
   border-width: 2px;
   transition: border 0.15s;
-  color: #f1f1f1;
-  background: #34302D;
-  border-color: #6db33f;
+  color: #ffffff;
+  background: #24AE1D;
+  border-color: #24AE1D;
   -webkit-transition: border 0.15s;
   -moz-transition: border 0.15s;
   -o-transition: border 0.15s;
   -ms-transition: border 0.15s; }
   .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active,
   .btn-primary .open .dropdown-toggle {
-    background-color: #34302D;
-    border-color: #34302D; }
+    background-color: #24AE1D;
+    border-color: #24AE1D; }
 
 .container .text-muted {
   margin: 20px 0; }
@@ -9335,8 +9336,8 @@ h1, .h1 {
   display: none; }
 
 .splash {
-  background: #6db33f;
-  color: #34302D;
+  background: #24AE1D;
+  color: #ffffff;
   display: none; }
 
 .error-page {
@@ -9376,11 +9377,11 @@ table td.action-column {
   margin-bottom: 0; }
 
 .container-details-table th {
-  background-color: #3c3834;
-  color: #f1f1f1; }
+  background-color: #1e1e1e;
+  color: #ffffff; }
 
 .status-help-content-table td {
-  color: #34302D; }
+  color: #111111; }
 
 .logo {
   width: 200px; }
@@ -9397,72 +9398,61 @@ table td.action-column {
   -webkit-animation-timing-function: linear; }
 
 hr {
-  border-top: 1px dotted #34302D; }
-
-@font-face {
-  font-family: 'varela_roundregular';
-  src: url("../fonts/varela_round-webfont.eot");
-  src: url("../fonts/varela_round-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/varela_round-webfont.woff") format("woff"), url("../fonts/varela_round-webfont.ttf") format("truetype"), url("../fonts/varela_round-webfont.svg#varela_roundregular") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-
-@font-face {
-  font-family: 'montserratregular';
-  src: url("../fonts/montserrat-webfont.eot");
-  src: url("../fonts/montserrat-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/montserrat-webfont.woff") format("woff"), url("../fonts/montserrat-webfont.ttf") format("truetype"), url("../fonts/montserrat-webfont.svg#montserratregular") format("svg");
-  font-weight: normal;
-  font-style: normal; }
+  border-top: 1px dotted #111111; }
 
 body, h1, .h1, h2, .h2, h3, .h3, p, input {
   margin: 0;
   font-weight: 400;
-  font-family: "varela_roundregular", sans-serif;
-  color: #34302d; }
+  font-family: "DM Sans", sans-serif;
+  color: #111111; }
 
 h1, .h1 {
   font-size: 24px;
   line-height: 30px;
-  font-family: "montserratregular", sans-serif; }
+  font-weight: 700;
+  font-family: "DM Sans", sans-serif; }
 
 h2, .h2 {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 24px;
   margin-bottom: 10px;
-  font-family: "montserratregular", sans-serif; }
+  font-family: "DM Sans", sans-serif; }
 
 h3, .h3 {
   font-size: 16px;
   line-height: 24px;
   margin-bottom: 10px;
-  font-weight: 700; }
+  font-weight: 600; }
 
 strong {
   font-weight: 700;
-  font-family: "montserratregular", sans-serif; }
+  font-family: "DM Sans", sans-serif; }
 
 .navbar {
-  border-top: 4px solid #6db33f;
-  background-color: #34302d;
+  border-top: 4px solid #24AE1D;
+  background-color: #111111;
   margin-bottom: 0px;
   border-bottom: 0;
   border-left: 0;
   border-right: 0; }
 
 .navbar a.navbar-brand {
-  background: url("../images/spring-logo-dataflow.png") -1px -1px no-repeat;
+  background: url("../images/liatrio-logo-reverse.svg") left center no-repeat;
+  background-size: contain;
   margin: 12px 0 6px;
-  width: 229px;
-  height: 46px;
+  width: 170px;
+  height: 32px;
   display: inline-block;
   text-decoration: none;
   padding: 0; }
 
 .navbar a.navbar-brand span {
   display: block;
-  width: 229px;
-  height: 46px;
-  background: url("../images/spring-logo-dataflow.png") -1px -48px no-repeat;
+  width: 170px;
+  height: 32px;
+  background: url("../images/liatrio-logo-reverse.svg") left center no-repeat;
+  background-size: contain;
   opacity: 0;
   -moz-transition: opacity 0.12s ease-in-out;
   -webkit-transition: opacity 0.12s ease-in-out;
@@ -9472,7 +9462,8 @@ strong {
   opacity: 1; }
 
 .navbar li > a, .navbar-text {
-  font-family: "montserratregular", sans-serif;
+  font-family: "DM Sans", sans-serif;
+  color: #ffffff;
   text-shadow: none;
   font-size: 14px;
   /* line-height: 14px; */
@@ -9491,8 +9482,8 @@ strong {
   margin-bottom: 0; }
 
 .navbar li:hover > a {
-  color: #eeeeee;
-  background-color: #6db33f; }
+  color: #ffffff;
+  background-color: #24AE1D; }
 
 .navbar-toggle {
   border-width: 0; }
@@ -9511,10 +9502,11 @@ strong {
   .navbar a.navbar-brand {
     display: block;
     margin: 0 auto 0 auto;
-    width: 148px;
-    height: 50px;
+    width: 140px;
+    height: 30px;
     float: none;
-    background: url("../images/spring-logo-dataflow-mobile.png") 0 center no-repeat; }
+    background: url("../images/liatrio-logo-reverse.svg") center no-repeat;
+    background-size: contain; }
   .homepage-billboard .homepage-subtitle {
     font-size: 21px;
     line-height: 21px; }
