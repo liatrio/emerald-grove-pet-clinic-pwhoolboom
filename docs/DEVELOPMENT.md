@@ -1,6 +1,6 @@
 # Development Guide
 
-This guide covers development setup, testing, and contribution guidelines for the Spring PetClinic application.
+This guide covers development setup, testing, and contribution guidelines for the Emerald Grove Veterinary Clinic application.
 
 ## Prerequisites
 
