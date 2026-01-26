@@ -96,9 +96,12 @@ $table-border-color:                      $spring-brown;
   margin-top: 12px;
   border-width: 2px;
   transition: border 0.15s;
-  color: #111111;
+  color: $spring-brown;
   background: $spring-green;
   border-color: $spring-green;
+  --bs-btn-color: #{$spring-brown};
+  --bs-btn-bg: #{$spring-green};
+  --bs-btn-border-color: #{$spring-green};
   -webkit-transition: border 0.15s;
   -moz-transition: border 0.15s;
   -o-transition: border 0.15s;
@@ -111,6 +114,9 @@ $table-border-color:                      $spring-brown;
   .open .dropdown-toggle {
     background-color: $spring-green;
     border-color: $spring-green;
+    --bs-btn-color: #{$spring-brown};
+    --bs-btn-bg: #{$spring-green};
+    --bs-btn-border-color: #{$spring-green};
   }
 }
 
@@ -237,7 +243,7 @@ table td.action-column {
 }
 
 hr {
-  border-top: 1px dotted $spring-brown;
+  border-top: 1px dotted var(--bs-border-color);
 }
 
 .liatrio-main {
@@ -370,7 +376,7 @@ hr {
 }
 
 .liatrio-muted {
-  color: #999999;
+  color: #b3b3b3;
 }
 
 .liatrio-btn-secondary {
@@ -400,8 +406,8 @@ hr {
   border-color: #333333;
 }
 
-.liatrio-table tbody td {
-  color: #f8f9fa !important;
+.liatrio-table.table tbody td {
+  color: #f8f9fa;
 }
 
 .liatrio-table a {

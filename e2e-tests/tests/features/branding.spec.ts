@@ -3,7 +3,7 @@ import { test, expect } from '@fixtures/base-test';
 import { HomePage } from '@pages/home-page';
 import { OwnerPage } from '@pages/owner-page';
 
-test('Branding uses Liatrio logo, colors, and typography', async ({ page }) => {
+test('Branding uses Emerald Grove logo, colors, and typography', async ({ page }) => {
   const homePage = new HomePage(page);
   const ownerPage = new OwnerPage(page);
 

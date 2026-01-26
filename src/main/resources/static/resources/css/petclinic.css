@@ -16,7 +16,6 @@
    * Copyright 2011-2025 The Bootstrap Authors
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    */
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
 :root,
 [data-bs-theme="light"] {
   --bs-blue: #0d6efd;
@@ -9308,6 +9307,9 @@ textarea.form-control-lg {
   color: #111111;
   background: #24AE1D;
   border-color: #24AE1D;
+  --bs-btn-color: #111111;
+  --bs-btn-bg: #24AE1D;
+  --bs-btn-border-color: #24AE1D;
   -webkit-transition: border 0.15s;
   -moz-transition: border 0.15s;
   -o-transition: border 0.15s;
@@ -9315,7 +9317,10 @@ textarea.form-control-lg {
   .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active,
   .btn-primary .open .dropdown-toggle {
     background-color: #24AE1D;
-    border-color: #24AE1D; }
+    border-color: #24AE1D;
+    --bs-btn-color: #111111;
+    --bs-btn-bg: #24AE1D;
+    --bs-btn-border-color: #24AE1D; }
 
 .container .text-muted {
   margin: 20px 0; }
@@ -9414,7 +9419,7 @@ table td.action-column {
   -webkit-animation-timing-function: linear; }
 
 hr {
-  border-top: 1px dotted #111111; }
+  border-top: 1px dotted var(--bs-border-color); }
 
 body, h1, .h1, h2, .h2, h3, .h3, p, input {
   margin: 0;
@@ -9652,7 +9657,7 @@ strong {
   box-shadow: 0 0 0 0.2rem rgba(36, 174, 29, 0.2); }
 
 .liatrio-muted {
-  color: #999999; }
+  color: #b3b3b3; }
 
 .liatrio-btn-secondary {
   border: 1px solid #24AE1D;
@@ -9676,8 +9681,8 @@ strong {
   color: #f8f9fa;
   border-color: #333333; }
 
-.liatrio-table tbody td {
-  color: #f8f9fa !important; }
+.liatrio-table.table tbody td {
+  color: #f8f9fa; }
 
 .liatrio-table a {
   color: #89df00; }
