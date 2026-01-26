@@ -37,6 +37,14 @@ $liatrio-shadow-md: 0 8px 24px rgba(17, 17, 17, 0.12);
   --liatrio-radius-lg: 16px;
   --liatrio-shadow-sm: #{$liatrio-shadow-sm};
   --liatrio-shadow-md: #{$liatrio-shadow-md};
+  --bs-emphasis-color: #f8f9fa;
+  --bs-emphasis-color-rgb: 248, 249, 250;
+  --bs-secondary-color: rgba(248, 249, 250, 0.75);
+  --bs-secondary-color-rgb: 248, 249, 250;
+  --bs-tertiary-color: rgba(248, 249, 250, 0.5);
+  --bs-tertiary-color-rgb: 248, 249, 250;
+  --bs-border-color: #333333;
+  --bs-border-color-translucent: rgba(255, 255, 255, 0.15);
 }
 
 $body-bg:                           #1a1f23;
@@ -179,7 +187,7 @@ table td.action-column {
 }
 
 .help-block {
-  color: #999999;
+  color: #b3b3b3;
 }
 
 .xd-containers {
