@@ -144,6 +144,9 @@ class OwnerController {
 	}
 
 	private static String csvField(String value) {
+		if (value == null) {
+			return "\"\"";
+		}
 		String sanitized = value.replace("\r\n", " ").replace('\r', ' ').replace('\n', ' ');
 		if (!sanitized.isEmpty() && "=+-@".indexOf(sanitized.charAt(0)) >= 0) {
 			sanitized = "'" + sanitized;
