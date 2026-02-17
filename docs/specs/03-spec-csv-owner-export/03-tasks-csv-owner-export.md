@@ -70,7 +70,7 @@
 
 ---
 
-### [ ] 2.0 GREEN — Implement the `/owners.csv` Handler in `OwnerController`
+### [x] 2.0 GREEN — Implement the `/owners.csv` Handler in `OwnerController`
 
 #### 2.0 Proof Artifact(s)
 
@@ -81,11 +81,11 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 Open
+- [x] 2.1 Open
   `src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java`.
-- [ ] 2.2 Add the following import at the top of the file (if not already present):
+- [x] 2.2 Add the following import at the top of the file (if not already present):
   `import org.springframework.http.ResponseEntity;`
-- [ ] 2.3 Add a new handler method below the existing `processFindForm` method:
+- [x] 2.3 Add a new handler method below the existing `processFindForm` method:
 
   ```java
   @GetMapping(value = "/owners.csv", produces = "text/csv")
@@ -107,9 +107,9 @@
   }
   ```
 
-- [ ] 2.4 Run `./mvnw test -Dtest=OwnerControllerTests` and confirm all tests pass, including
+- [x] 2.4 Run `./mvnw test -Dtest=OwnerControllerTests` and confirm all tests pass, including
   the three new CSV tests added in Task 1.0.
-- [ ] 2.5 Run `./mvnw test` (full suite) and confirm there are no regressions in any other
+- [x] 2.5 Run `./mvnw test` (full suite) and confirm there are no regressions in any other
   test class.
 
 ---

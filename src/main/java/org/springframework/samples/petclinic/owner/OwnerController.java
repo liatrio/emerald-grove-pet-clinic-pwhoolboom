@@ -22,6 +22,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.system.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -117,6 +118,27 @@ class OwnerController {
 
 		// multiple owners found
 		return addPaginationModel(page, model, ownersResults);
+	}
+
+	@GetMapping(value = "/owners.csv", produces = "text/csv")
+	public ResponseEntity<String> exportOwnersCsv(@RequestParam(defaultValue = "") String lastName) {
+		List<Owner> results = owners.findByLastNameStartingWith(lastName, Pageable.unpaged()).getContent();
+		StringBuilder csv = new StringBuilder("id,firstName,lastName,address,city,telephone\n");
+		for (Owner owner : results) {
+			csv.append(owner.getId())
+				.append(',')
+				.append(owner.getFirstName())
+				.append(',')
+				.append(owner.getLastName())
+				.append(',')
+				.append(owner.getAddress())
+				.append(',')
+				.append(owner.getCity())
+				.append(',')
+				.append(owner.getTelephone())
+				.append('\n');
+		}
+		return ResponseEntity.ok(csv.toString());
 	}
 
 	private String addPaginationModel(int page, Model model, Page<Owner> paginated) {
