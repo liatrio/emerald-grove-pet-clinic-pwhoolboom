@@ -125,20 +125,30 @@ class OwnerController {
 		List<Owner> results = owners.findByLastNameStartingWith(lastName, Pageable.unpaged()).getContent();
 		StringBuilder csv = new StringBuilder("id,firstName,lastName,address,city,telephone\n");
 		for (Owner owner : results) {
-			csv.append(owner.getId())
+			csv.append('"')
+				.append(owner.getId())
+				.append('"')
 				.append(',')
-				.append(owner.getFirstName())
+				.append(csvField(owner.getFirstName()))
 				.append(',')
-				.append(owner.getLastName())
+				.append(csvField(owner.getLastName()))
 				.append(',')
-				.append(owner.getAddress())
+				.append(csvField(owner.getAddress()))
 				.append(',')
-				.append(owner.getCity())
+				.append(csvField(owner.getCity()))
 				.append(',')
-				.append(owner.getTelephone())
+				.append(csvField(owner.getTelephone()))
 				.append('\n');
 		}
 		return ResponseEntity.ok(csv.toString());
+	}
+
+	private static String csvField(String value) {
+		String sanitized = value.replace("\r\n", " ").replace('\r', ' ').replace('\n', ' ');
+		if (!sanitized.isEmpty() && "=+-@".indexOf(sanitized.charAt(0)) >= 0) {
+			sanitized = "'" + sanitized;
+		}
+		return "\"" + sanitized.replace("\"", "\"\"") + "\"";
 	}
 
 	private String addPaginationModel(int page, Model model, Page<Owner> paginated) {

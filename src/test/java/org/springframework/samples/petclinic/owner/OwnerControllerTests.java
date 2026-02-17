@@ -278,8 +278,8 @@ class OwnerControllerTests {
 		mockMvc.perform(get("/owners.csv").param("lastName", "Franklin"))
 			.andExpect(status().isOk())
 			.andExpect(content().contentTypeCompatibleWith("text/csv"))
-			.andExpect(content().string(
-					org.hamcrest.Matchers.containsString("1,George,Franklin,110 W. Liberty St.,Madison,6085551023")));
+			.andExpect(content().string(org.hamcrest.Matchers
+				.containsString("\"1\",\"George\",\"Franklin\",\"110 W. Liberty St.\",\"Madison\",\"6085551023\"")));
 	}
 
 	@Test
