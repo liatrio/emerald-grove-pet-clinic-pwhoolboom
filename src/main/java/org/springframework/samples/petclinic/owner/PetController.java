@@ -68,7 +68,7 @@ class PetController {
 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
 		Owner owner = optionalOwner.orElseThrow(() -> new ResourceNotFoundException(
-				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct"));
 		return owner;
 	}
 
@@ -82,7 +82,7 @@ class PetController {
 
 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
 		Owner owner = optionalOwner.orElseThrow(() -> new ResourceNotFoundException(
-				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct"));
 		Pet pet = owner.getPet(petId);
 		if (pet == null) {
 			throw new ResourceNotFoundException("Pet not found with id: " + petId + " for owner with id: " + ownerId);

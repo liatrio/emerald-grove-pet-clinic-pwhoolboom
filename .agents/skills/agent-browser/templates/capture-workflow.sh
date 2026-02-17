@@ -13,6 +13,12 @@
 
 set -euo pipefail
 
+# Cleanup function to ensure browser is always closed
+cleanup() {
+    agent-browser close 2>/dev/null || true
+}
+trap cleanup EXIT
+
 TARGET_URL="${1:?Usage: $0 <url> [output-dir]}"
 OUTPUT_DIR="${2:-.}"
 
@@ -60,9 +66,6 @@ echo "Saved: $OUTPUT_DIR/page.pdf"
 #     agent-browser wait 1000
 # done
 # agent-browser screenshot --full "$OUTPUT_DIR/page-scrolled.png"
-
-# Cleanup
-agent-browser close
 
 echo ""
 echo "Capture complete:"

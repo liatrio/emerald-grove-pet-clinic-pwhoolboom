@@ -20,13 +20,13 @@ Traditional approach:
 
 ```text
 Full DOM/HTML → AI parses → CSS selector → Action (~3000-5000 tokens)
-```text
+```
 
 agent-browser approach:
 
 ```text
 Compact snapshot → @refs assigned → Direct interaction (~200-400 tokens)
-```text
+```
 
 ## The Snapshot Command
 
@@ -36,7 +36,7 @@ agent-browser snapshot
 
 # Interactive snapshot (-i flag) - RECOMMENDED
 agent-browser snapshot -i
-```text
+```
 
 ### Snapshot Output Format
 
@@ -60,7 +60,7 @@ URL: https://example.com
 
 @e13 [footer]
   @e14 [a] "Privacy Policy"
-```text
+```
 
 ## Using Refs
 
@@ -78,7 +78,7 @@ agent-browser fill @e11 "password123"
 
 # Submit the form
 agent-browser click @e12
-```text
+```
 
 ## Ref Lifecycle
 
@@ -95,7 +95,7 @@ agent-browser click @e1
 # MUST re-snapshot to get new refs!
 agent-browser snapshot -i
 # @e1 [h1] "Page 2"  ← Different element now!
-```text
+```
 
 ## Best Practices
 
@@ -110,7 +110,7 @@ agent-browser click @e1            # Use ref
 # WRONG
 agent-browser open https://example.com
 agent-browser click @e1            # Ref doesn't exist yet!
-```text
+```
 
 ### 2. Re-Snapshot After Navigation
 
@@ -118,7 +118,7 @@ agent-browser click @e1            # Ref doesn't exist yet!
 agent-browser click @e5            # Navigates to new page
 agent-browser snapshot -i          # Get new refs
 agent-browser click @e1            # Use new refs
-```text
+```
 
 ### 3. Re-Snapshot After Dynamic Changes
 
@@ -126,7 +126,7 @@ agent-browser click @e1            # Use new refs
 agent-browser click @e1            # Opens dropdown
 agent-browser snapshot -i          # See dropdown items
 agent-browser click @e7            # Select item
-```text
+```
 
 ### 4. Snapshot Specific Regions
 
@@ -135,7 +135,7 @@ For complex pages, snapshot specific areas:
 ```bash
 # Snapshot just the form
 agent-browser snapshot @e9
-```text
+```
 
 ## Ref Notation Details
 
@@ -147,7 +147,7 @@ agent-browser snapshot @e9
 │    │   └─ Key attributes shown
 │    └─ HTML tag name
 └─ Unique ref ID
-```text
+```
 
 ### Common Patterns
 
@@ -162,7 +162,7 @@ agent-browser snapshot @e9
 @e8 [img alt="Logo"]                     # Image
 @e9 [checkbox] checked                   # Checked checkbox
 @e10 [radio] selected                    # Selected radio
-```text
+```
 
 ## Troubleshooting
 
@@ -171,7 +171,7 @@ agent-browser snapshot @e9
 ```bash
 # Ref may have changed - re-snapshot
 agent-browser snapshot -i
-```text
+```
 
 ### Element Not Visible in Snapshot
 
@@ -183,7 +183,7 @@ agent-browser snapshot -i
 # Or wait for dynamic content
 agent-browser wait 1000
 agent-browser snapshot -i
-```text
+```
 
 ### Too Many Elements
 
@@ -193,4 +193,4 @@ agent-browser snapshot @e5
 
 # Or use get text for content-only extraction
 agent-browser get text @e5
-```text
+```

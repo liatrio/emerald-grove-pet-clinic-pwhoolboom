@@ -37,6 +37,7 @@ if [[ -f "$STATE_FILE" ]]; then
     if [[ "$CURRENT_URL" != *"login"* ]] && [[ "$CURRENT_URL" != *"signin"* ]]; then
         echo "Session restored successfully"
         agent-browser snapshot -i
+        agent-browser close
         exit 0
     fi
     echo "Session expired, performing fresh login..."

@@ -10,11 +10,12 @@ test.describe('404 Error Handling', () => {
 
   test('should show Find Owners link on 404 page', async ({ page }) => {
     await page.goto('http://localhost:8080/owners/99999');
-    const findOwnersLink = page.getByRole('link', { name: /find owners/i });
-    await expect(findOwnersLink).toBeVisible();
+    // Target the button specifically (not the nav link)
+    const findOwnersButton = page.locator('.btn-primary:has-text("Find Owners")');
+    await expect(findOwnersButton).toBeVisible();
 
     // Click link and verify navigation to /owners/find
-    await findOwnersLink.click();
+    await findOwnersButton.click();
     await expect(page).toHaveURL(/.*\/owners\/find/);
   });
 

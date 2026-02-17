@@ -179,7 +179,7 @@ fi
 1. **Never commit state files** - They contain session tokens
 
    ```bash
-   echo "*.auth-state.json" >> .gitignore
+   echo "*-state.json" >> .gitignore
    ```
 
 2. **Use environment variables for credentials**
