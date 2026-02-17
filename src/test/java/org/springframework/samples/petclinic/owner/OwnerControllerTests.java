@@ -248,4 +248,10 @@ class OwnerControllerTests {
 			.andExpect(flash().attributeExists("error"));
 	}
 
+	@Test
+	void testShowNonExistentOwner() throws Exception {
+		given(this.owners.findById(99999)).willReturn(Optional.empty());
+		mockMvc.perform(get("/owners/99999")).andExpect(status().isNotFound());
+	}
+
 }

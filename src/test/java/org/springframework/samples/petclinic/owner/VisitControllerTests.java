@@ -91,4 +91,10 @@ class VisitControllerTests {
 			.andExpect(view().name("pets/createOrUpdateVisitForm"));
 	}
 
+	@Test
+	void testAddVisitToNonExistentPet() throws Exception {
+		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, 99999))
+			.andExpect(status().isNotFound());
+	}
+
 }
