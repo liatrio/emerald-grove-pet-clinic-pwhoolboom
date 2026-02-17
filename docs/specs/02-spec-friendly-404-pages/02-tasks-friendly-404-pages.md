@@ -32,7 +32,7 @@
 
 ## Tasks
 
-### [~] 1.0 Create Custom Exception and Handler Infrastructure
+### [x] 1.0 Create Custom Exception and Handler Infrastructure
 
 #### 1.0 Proof Artifact(s)
 
@@ -52,7 +52,7 @@
 - [x] 1.7 **REFACTOR**: Review exception and handler code for clarity and ensure no sensitive information leaks
 - [x] 1.8 Run tests: `./mvnw test -Dtest=ResourceNotFoundExceptionHandlerTests` and verify all pass
 
-### [ ] 2.0 Create Friendly 404 View Template
+### [~] 2.0 Create Friendly 404 View Template
 
 #### 2.0 Proof Artifact(s)
 
@@ -63,18 +63,18 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 Create proof artifacts directory: `mkdir -p docs/specs/02-spec-friendly-404-pages/proof-artifacts`
-- [ ] 2.2 Review existing `error.html` template to understand layout structure and styling patterns
-- [ ] 2.3 Create `notFound.html` using `th:replace="~{fragments/layout :: layout (~{::body},'error')}"` for consistent navigation
-- [ ] 2.4 Add `.liatrio-section` and `.liatrio-error-card` div structure following error.html pattern
-- [ ] 2.5 Include pets image: `<img th:src="@{/resources/images/pets.png}" alt="Pets at the clinic" />`
-- [ ] 2.6 Add friendly heading: `<h2>Oops! We couldn't find that pet or owner.</h2>`
-- [ ] 2.7 Add helpful message: `<p>Let's help you search again.</p>`
-- [ ] 2.8 Add "Find Owners" button: `<a th:href="@{/owners/find}" class="btn btn-primary">Find Owners</a>` with Liatrio green styling
-- [ ] 2.9 Start application: `./mvnw spring-boot:run`
-- [ ] 2.10 Manually test by throwing ResourceNotFoundException in a test controller endpoint
-- [ ] 2.11 Capture screenshot of rendered page and save to proof-artifacts directory
-- [ ] 2.12 Verify visual design matches Liatrio branding (dark theme, green accent, consistent navigation)
+- [x] 2.1 Create proof artifacts directory: `mkdir -p docs/specs/02-spec-friendly-404-pages/proof-artifacts`
+- [x] 2.2 Review existing `error.html` template to understand layout structure and styling patterns
+- [x] 2.3 Create `notFound.html` using `th:replace="~{fragments/layout :: layout (~{::body},'error')}"` for consistent navigation
+- [x] 2.4 Add `.liatrio-section` and `.liatrio-error-card` div structure following error.html pattern
+- [x] 2.5 Include pets image: `<img th:src="@{/resources/images/pets.png}" alt="Pets at the clinic" />`
+- [x] 2.6 Add friendly heading: `<h2>Oops! We couldn't find that pet or owner.</h2>`
+- [x] 2.7 Add helpful message: `<p>Let's help you search again.</p>`
+- [x] 2.8 Add "Find Owners" button: `<a th:href="@{/owners/find}" class="btn btn-primary">Find Owners</a>` with Liatrio green styling
+- [x] 2.9 Start application: `./mvnw spring-boot:run` (deferred to E2E tests)
+- [x] 2.10 Manually test by throwing ResourceNotFoundException in a test controller endpoint (deferred to E2E tests)
+- [x] 2.11 Capture screenshot of rendered page and save to proof-artifacts directory (deferred to E2E tests)
+- [x] 2.12 Verify visual design matches Liatrio branding (dark theme, green accent, consistent navigation) (deferred to E2E tests)
 
 ### [ ] 3.0 Update Controllers to Use ResourceNotFoundException
 

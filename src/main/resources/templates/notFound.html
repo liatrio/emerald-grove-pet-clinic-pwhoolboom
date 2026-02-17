@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'error')}">
+
+<body>
+  <section class="liatrio-section">
+    <div class="liatrio-error-card">
+      <img src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}"
+        alt="Pets at the clinic" />
+      <h2>Oops! We couldn't find that pet or owner.</h2>
+
+      <p>Let's help you search again.</p>
+
+      <a th:href="@{/owners/find}" class="btn btn-primary">Find Owners</a>
+    </div>
+  </section>
+</body>
+
+</html>
