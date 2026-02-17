@@ -114,7 +114,7 @@
 
 ---
 
-### [ ] 3.0 Playwright E2E — CSV Download Verification
+### [x] 3.0 Playwright E2E — CSV Download Verification
 
 #### 3.0 Proof Artifact(s)
 
@@ -124,9 +124,9 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 Ensure the Spring Boot application is running locally on port 8080 before running the
+- [x] 3.1 Ensure the Spring Boot application is running locally on port 8080 before running the
   E2E tests (the Playwright config auto-starts it via `webServer` if it is not already running).
-- [ ] 3.2 Create the file
+- [x] 3.2 Create the file
   `e2e-tests/tests/features/owner-csv-export.spec.ts` with the following content:
 
   ```typescript
@@ -146,7 +146,7 @@
   });
   ```
 
-- [ ] 3.3 From the `e2e-tests/` directory, run:
+- [x] 3.3 From the `e2e-tests/` directory, run:
   `npm test -- --grep "Owner CSV Export"`
   and confirm the test passes. If the application is not already running, Playwright will start
   it automatically (allow up to 2 minutes for the first cold start).
