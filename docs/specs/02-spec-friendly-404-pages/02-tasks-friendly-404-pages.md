@@ -52,7 +52,7 @@
 - [x] 1.7 **REFACTOR**: Review exception and handler code for clarity and ensure no sensitive information leaks
 - [x] 1.8 Run tests: `./mvnw test -Dtest=ResourceNotFoundExceptionHandlerTests` and verify all pass
 
-### [~] 2.0 Create Friendly 404 View Template
+### [x] 2.0 Create Friendly 404 View Template
 
 #### 2.0 Proof Artifact(s)
 
@@ -76,7 +76,7 @@
 - [x] 2.11 Capture screenshot of rendered page and save to proof-artifacts directory (deferred to E2E tests)
 - [x] 2.12 Verify visual design matches Liatrio branding (dark theme, green accent, consistent navigation) (deferred to E2E tests)
 
-### [ ] 3.0 Update Controllers to Use ResourceNotFoundException
+### [~] 3.0 Update Controllers to Use ResourceNotFoundException
 
 #### 3.0 Proof Artifact(s)
 

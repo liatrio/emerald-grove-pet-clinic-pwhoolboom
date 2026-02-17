@@ -1,0 +1,163 @@
+diff --git a/docs/specs/02-spec-friendly-404-pages/02-tasks-friendly-404-pages.md b/docs/specs/02-spec-friendly-404-pages/02-tasks-friendly-404-pages.md
+index d731d91..78acdcd 100644
+--- a/docs/specs/02-spec-friendly-404-pages/02-tasks-friendly-404-pages.md
++++ b/docs/specs/02-spec-friendly-404-pages/02-tasks-friendly-404-pages.md
+@@ -52,7 +52,7 @@
+ - [x] 1.7 **REFACTOR**: Review exception and handler code for clarity and ensure no sensitive information leaks
+ - [x] 1.8 Run tests: `./mvnw test -Dtest=ResourceNotFoundExceptionHandlerTests` and verify all pass
+
+-### [~] 2.0 Create Friendly 404 View Template
++### [x] 2.0 Create Friendly 404 View Template
+
+ #### 2.0 Proof Artifact(s)
+
+@@ -76,7 +76,7 @@
+ - [x] 2.11 Capture screenshot of rendered page and save to proof-artifacts directory (deferred to E2E tests)
+ - [x] 2.12 Verify visual design matches Liatrio branding (dark theme, green accent, consistent navigation) (deferred to E2E tests)
+
+-### [ ] 3.0 Update Controllers to Use ResourceNotFoundException
++### [~] 3.0 Update Controllers to Use ResourceNotFoundException
+
+ #### 3.0 Proof Artifact(s)
+
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java b/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+index 199ca36..0332931 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+@@ -22,6 +22,7 @@ import java.util.Optional;
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.PageRequest;
+ import org.springframework.data.domain.Pageable;
++import org.springframework.samples.petclinic.system.ResourceNotFoundException;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.Model;
+ import org.springframework.validation.BindingResult;
+@@ -65,8 +66,8 @@ class OwnerController {
+ 	public Owner findOwner(@PathVariable(name = "ownerId", required = false) Integer ownerId) {
+ 		return ownerId == null ? new Owner()
+ 				: this.owners.findById(ownerId)
+-					.orElseThrow(() -> new IllegalArgumentException("Owner not found with id: " + ownerId
+-							+ ". Please ensure the ID is correct " + "and the owner exists in the database."));
++					.orElseThrow(() -> new ResourceNotFoundException(
++							"Owner not found with id: " + ownerId + ". Please ensure the ID is correct."));
+ 	}
+
+ 	@GetMapping("/owners/new")
+@@ -167,7 +168,7 @@ class OwnerController {
+ 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
+ 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResourceNotFoundException(
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+ 		mav.addObject(owner);
+ 		return mav;
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/PetController.java b/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
+index 8398e4f..841aad3 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/PetController.java
+@@ -20,6 +20,7 @@ import java.util.Collection;
+ import java.util.Objects;
+ import java.util.Optional;
+
++import org.springframework.samples.petclinic.system.ResourceNotFoundException;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.ModelMap;
+ import org.springframework.util.Assert;
+@@ -66,7 +67,7 @@ class PetController {
+ 	@ModelAttribute("owner")
+ 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResourceNotFoundException(
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+ 		return owner;
+ 	}
+@@ -80,9 +81,13 @@ class PetController {
+ 		}
+
+ 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResourceNotFoundException(
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+-		return owner.getPet(petId);
++		Pet pet = owner.getPet(petId);
++		if (pet == null) {
++			throw new ResourceNotFoundException("Pet not found with id: " + petId + " for owner with id: " + ownerId);
++		}
++		return pet;
+ 	}
+
+ 	@InitBinder("owner")
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java b/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
+index cc3e3ce..d7e93f1 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/VisitController.java
+@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.owner;
+ import java.util.Map;
+ import java.util.Optional;
+
++import org.springframework.samples.petclinic.system.ResourceNotFoundException;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.validation.BindingResult;
+ import org.springframework.web.bind.WebDataBinder;
+@@ -63,12 +64,12 @@ class VisitController {
+ 	public Visit loadPetWithVisit(@PathVariable("ownerId") int ownerId, @PathVariable("petId") int petId,
+ 			Map<String, Object> model) {
+ 		Optional<Owner> optionalOwner = owners.findById(ownerId);
+-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
++		Owner owner = optionalOwner.orElseThrow(() -> new ResourceNotFoundException(
+ 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
+
+ 		Pet pet = owner.getPet(petId);
+ 		if (pet == null) {
+-			throw new IllegalArgumentException(
++			throw new ResourceNotFoundException(
+ 					"Pet with id " + petId + " not found for owner with id " + ownerId + ".");
+ 		}
+ 		model.put("pet", pet);
+diff --git a/src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java b/src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java
+index bcab197..7fbba59 100644
+--- a/src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java
++++ b/src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java
+@@ -248,4 +248,10 @@ class OwnerControllerTests {
+ 			.andExpect(flash().attributeExists("error"));
+ 	}
+
++	@Test
++	void testShowNonExistentOwner() throws Exception {
++		given(this.owners.findById(99999)).willReturn(Optional.empty());
++		mockMvc.perform(get("/owners/99999")).andExpect(status().isNotFound());
++	}
++
+ }
+diff --git a/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java b/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
+index 391bb3d..79531fe 100644
+--- a/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
++++ b/src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java
+@@ -208,4 +208,10 @@ class PetControllerTests {
+
+ 	}
+
++	@Test
++	void testShowNonExistentPet() throws Exception {
++		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, 99999))
++			.andExpect(status().isNotFound());
++	}
++
+ }
+diff --git a/src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java b/src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java
+index 781de38..efefe6d 100644
+--- a/src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java
++++ b/src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java
+@@ -91,4 +91,10 @@ class VisitControllerTests {
+ 			.andExpect(view().name("pets/createOrUpdateVisitForm"));
+ 	}
+
++	@Test
++	void testAddVisitToNonExistentPet() throws Exception {
++		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, 99999))
++			.andExpect(status().isNotFound());
++	}
++
+ }

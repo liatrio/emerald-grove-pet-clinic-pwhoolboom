@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.owner;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.samples.petclinic.system.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -63,12 +64,12 @@ class VisitController {
 	public Visit loadPetWithVisit(@PathVariable("ownerId") int ownerId, @PathVariable("petId") int petId,
 			Map<String, Object> model) {
 		Optional<Owner> optionalOwner = owners.findById(ownerId);
-		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
+		Owner owner = optionalOwner.orElseThrow(() -> new ResourceNotFoundException(
 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
 
 		Pet pet = owner.getPet(petId);
 		if (pet == null) {
-			throw new IllegalArgumentException(
+			throw new ResourceNotFoundException(
 					"Pet with id " + petId + " not found for owner with id " + ownerId + ".");
 		}
 		model.put("pet", pet);
