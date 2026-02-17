@@ -254,4 +254,45 @@ class OwnerControllerTests {
 		mockMvc.perform(get("/owners/99999")).andExpect(status().isNotFound());
 	}
 
+	@Test
+	void testExportOwnersCsvNoFilter() throws Exception {
+		// Arrange
+		when(this.owners.findByLastNameStartingWith(eq(""), any(Pageable.class)))
+			.thenReturn(new PageImpl<>(List.of(george())));
+
+		// Act & Assert
+		mockMvc.perform(get("/owners.csv"))
+			.andExpect(status().isOk())
+			.andExpect(content().contentTypeCompatibleWith("text/csv"))
+			.andExpect(content()
+				.string(org.hamcrest.Matchers.containsString("id,firstName,lastName,address,city,telephone")));
+	}
+
+	@Test
+	void testExportOwnersCsvWithLastNameFilter() throws Exception {
+		// Arrange
+		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class)))
+			.thenReturn(new PageImpl<>(List.of(george())));
+
+		// Act & Assert
+		mockMvc.perform(get("/owners.csv").param("lastName", "Franklin"))
+			.andExpect(status().isOk())
+			.andExpect(content().contentTypeCompatibleWith("text/csv"))
+			.andExpect(content().string(
+					org.hamcrest.Matchers.containsString("1,George,Franklin,110 W. Liberty St.,Madison,6085551023")));
+	}
+
+	@Test
+	void testExportOwnersCsvEmptyResults() throws Exception {
+		// Arrange
+		when(this.owners.findByLastNameStartingWith(eq("Unknown"), any(Pageable.class)))
+			.thenReturn(new PageImpl<>(List.of()));
+
+		// Act & Assert
+		mockMvc.perform(get("/owners.csv").param("lastName", "Unknown"))
+			.andExpect(status().isOk())
+			.andExpect(content().contentTypeCompatibleWith("text/csv"))
+			.andExpect(content().string("id,firstName,lastName,address,city,telephone\n"));
+	}
+
 }
