@@ -153,7 +153,7 @@
 
 ---
 
-### [ ] 4.0 Proof Documentation — curl Snippets
+### [x] 4.0 Proof Documentation — curl Snippets
 
 #### 4.0 Proof Artifact(s)
 
@@ -167,16 +167,16 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 Ensure the Spring Boot application is running:
+- [x] 4.1 Ensure the Spring Boot application is running:
   `./mvnw spring-boot:run`
   (If it is already running from Task 3.0, you can skip this step.)
-- [ ] 4.2 Run the unfiltered curl command and copy the **full terminal output** (headers + body):
+- [x] 4.2 Run the unfiltered curl command and copy the **full terminal output** (headers + body):
   `curl -i "http://localhost:8080/owners.csv"`
-- [ ] 4.3 Run the filtered curl command and copy the **full terminal output**:
+- [x] 4.3 Run the filtered curl command and copy the **full terminal output**:
   `curl -i "http://localhost:8080/owners.csv?lastName=Davis"`
-- [ ] 4.4 Create the directory:
+- [x] 4.4 Create the directory:
   `docs/specs/03-spec-csv-owner-export/03-proofs/`
-- [ ] 4.5 Create the file
+- [x] 4.5 Create the file
   `docs/specs/03-spec-csv-owner-export/03-proofs/03-task-04-proofs.md` with the following
   structure, pasting your captured output into each fenced code block:
 
