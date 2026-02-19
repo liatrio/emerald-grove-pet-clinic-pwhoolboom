@@ -35,6 +35,7 @@ import java.util.Optional;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -55,6 +56,8 @@ class PetControllerTests {
 
 	private static final int TEST_PET_ID = 1;
 
+	private static final int TEST_PET_WITH_VISITS_ID = 3;
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -74,12 +77,20 @@ class PetControllerTests {
 		Owner owner = new Owner();
 		Pet pet = new Pet();
 		Pet dog = new Pet();
+		Pet whiskers = new Pet();
 		owner.addPet(pet);
 		owner.addPet(dog);
+		owner.addPet(whiskers);
 		pet.setId(TEST_PET_ID);
 		dog.setId(TEST_PET_ID + 1);
+		whiskers.setId(TEST_PET_WITH_VISITS_ID);
 		pet.setName("petty");
 		dog.setName("doggy");
+		whiskers.setName("whiskers");
+		Visit visit = new Visit();
+		visit.setDate(LocalDate.of(2024, 1, 15));
+		visit.setDescription("Annual checkup");
+		whiskers.addVisit(visit);
 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(owner));
 	}
 
@@ -211,6 +222,28 @@ class PetControllerTests {
 	@Test
 	void testShowNonExistentPet() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, 99999))
+			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	void testProcessDeleteFormSuccess() throws Exception {
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/delete", TEST_OWNER_ID, TEST_PET_ID))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/owners/{ownerId}"))
+			.andExpect(flash().attributeExists("message"));
+	}
+
+	@Test
+	void testProcessDeleteFormBlockedByVisits() throws Exception {
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/delete", TEST_OWNER_ID, TEST_PET_WITH_VISITS_ID))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/owners/{ownerId}"))
+			.andExpect(flash().attributeExists("error"));
+	}
+
+	@Test
+	void testProcessDeleteNonExistentPet() throws Exception {
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/delete", TEST_OWNER_ID, 99999))
 			.andExpect(status().isNotFound());
 	}
 
