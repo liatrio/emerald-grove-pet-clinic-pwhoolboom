@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
@@ -92,6 +93,10 @@ class VisitController {
 	@PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
 	public String processNewVisitForm(@ModelAttribute Owner owner, @PathVariable int petId, @Valid Visit visit,
 			BindingResult result, RedirectAttributes redirectAttributes) {
+		if (visit.getDate() != null && visit.getDate().isBefore(LocalDate.now())) {
+			result.rejectValue("date", "visitDate.pastNotAllowed");
+		}
+
 		if (result.hasErrors()) {
 			return "pets/createOrUpdateVisitForm";
 		}

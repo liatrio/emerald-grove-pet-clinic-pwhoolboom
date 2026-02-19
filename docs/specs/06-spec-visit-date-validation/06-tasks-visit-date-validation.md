@@ -69,7 +69,7 @@ Add a `@Nested` class to `VisitControllerTests` with three tests covering all da
 
 ---
 
-### [ ] 2.0 Implement Visit Date Validation and i18n Messages (GREEN Phase)
+### [x] 2.0 Implement Visit Date Validation and i18n Messages (GREEN Phase)
 
 Add the past-date guard to `VisitController` and populate the message key in all three i18n files. The implementation is done when every `VisitControllerTests` test turns green.
 
@@ -81,13 +81,13 @@ Add the past-date guard to `VisitController` and populate the message key in all
 
 #### 2.0 Tasks
 
-- [ ] 2.1 Open `VisitController.java` and add the following import below the existing `java.util.*` imports:
+- [x] 2.1 Open `VisitController.java` and add the following import below the existing `java.util.*` imports:
 
   ```java
   import java.time.LocalDate;
   ```
 
-- [ ] 2.2 In `VisitController.processNewVisitForm()`, add the past-date validation check **before** the existing `if (result.hasErrors())` block:
+- [x] 2.2 In `VisitController.processNewVisitForm()`, add the past-date validation check **before** the existing `if (result.hasErrors())` block:
 
   ```java
   if (visit.getDate() != null && visit.getDate().isBefore(LocalDate.now())) {
@@ -95,27 +95,27 @@ Add the past-date guard to `VisitController` and populate the message key in all
   }
   ```
 
-- [ ] 2.3 Open `src/main/resources/messages/messages.properties` and add the following line at the end of the file (after the `deletePet.*` keys):
+- [x] 2.3 Open `src/main/resources/messages/messages.properties` and add the following line at the end of the file (after the `deletePet.*` keys):
 
   ```properties
   visitDate.pastNotAllowed=Invalid date: please choose today or a future date
   ```
 
-- [ ] 2.4 Open `src/main/resources/messages/messages_en.properties` and add the following line at the end of the file (after the `deletePet.*` keys):
+- [x] 2.4 Open `src/main/resources/messages/messages_en.properties` and add the following line at the end of the file (after the `deletePet.*` keys):
 
   ```properties
   visitDate.pastNotAllowed=Invalid date: please choose today or a future date
   ```
 
-- [ ] 2.5 Open `src/main/resources/messages/messages_es.properties` and add the following line at the end of the file (after the `deletePet.*` keys):
+- [x] 2.5 Open `src/main/resources/messages/messages_es.properties` and add the following line at the end of the file (after the `deletePet.*` keys):
 
   ```properties
   visitDate.pastNotAllowed=Fecha inválida: por favor elija hoy o una fecha futura
   ```
 
-- [ ] 2.6 Run `./mvnw test -Dtest=VisitControllerTests`. Confirm all tests pass (BUILD SUCCESS). **If the past-date test still fails, recheck step 2.2 — the `rejectValue` call must be placed before the `hasErrors()` check.**
-- [ ] 2.7 Run the full test suite with `./mvnw test`. Confirm BUILD SUCCESS with no new failures.
-- [ ] 2.8 Create the proof directory `docs/specs/06-spec-visit-date-validation/proof/` and save a screenshot of the terminal showing BUILD SUCCESS as `past-date-junit-green.png` inside it.
+- [x] 2.6 Run `./mvnw test -Dtest=VisitControllerTests`. Confirm all tests pass (BUILD SUCCESS). **If the past-date test still fails, recheck step 2.2 — the `rejectValue` call must be placed before the `hasErrors()` check.**
+- [x] 2.7 Run the full test suite with `./mvnw test`. Confirm BUILD SUCCESS with no new failures.
+- [x] 2.8 Create the proof directory `docs/specs/06-spec-visit-date-validation/proof/` and save a screenshot of the terminal showing BUILD SUCCESS as `past-date-junit-green.png` inside it.
 
 ---
 
