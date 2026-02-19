@@ -57,7 +57,7 @@ Implement the minimum controller change to make the RED phase model-attribute te
 
 ---
 
-### [~] 3.0 GREEN — Update `ownersList.html` to Include Filter in Pagination Links and Display Active Filter Badge
+### [x] 3.0 GREEN — Update `ownersList.html` to Include Filter in Pagination Links and Display Active Filter Badge
 
 Fix every pagination link in the Owners list template to include the `lastName` query parameter when a filter is active. Use Thymeleaf parameter-map URL syntax so the parameter is automatically omitted when `lastName` is `null`. Add a conditional "Active filter" badge.
 
@@ -93,7 +93,7 @@ Fix every pagination link in the Owners list template to include the `lastName` 
 
 ---
 
-### [ ] 4.0 Playwright E2E Test — Verify Filter Persists Across Pagination
+### [x] 4.0 Playwright E2E Test — Verify Filter Persists Across Pagination
 
 Write a Playwright TypeScript test that creates enough owner test data to span two pages, applies a `lastName` filter, navigates forward and backward through pages, and asserts the filter is retained on every page. Capture required proof screenshots.
 
