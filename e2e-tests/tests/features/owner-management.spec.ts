@@ -75,3 +75,76 @@ test.describe('Owner Management', () => {
     await expect(page.getByRole('button', { name: /Add Owner/i })).toBeVisible();
   });
 });
+
+test.describe('Duplicate Owner Prevention', () => {
+  test('blocks creating an owner with the same name and telephone as an existing owner', async ({
+    page,
+  }, testInfo) => {
+    const ownerPage = new OwnerPage(page);
+    // createOwner() generates a unique telephone each run; reuse the same object for both
+    // attempts so the second submission exactly matches the first
+    const owner = createOwner({ firstName: 'Duplicate', lastName: 'DetectionTest' });
+
+    // Create the owner for the first time
+    await ownerPage.openFindOwners();
+    await ownerPage.clickAddOwner();
+    await ownerPage.fillOwnerForm(owner);
+    await ownerPage.submitOwnerForm();
+    await expect(page.getByRole('heading', { name: /Owner Information/i })).toBeVisible();
+
+    // Attempt to create the same owner again
+    await ownerPage.openFindOwners();
+    await ownerPage.clickAddOwner();
+    await ownerPage.fillOwnerForm(owner);
+    await ownerPage.submitOwnerForm();
+
+    // Assert the duplicate error banner is shown
+    await expect(ownerPage.duplicateErrorBanner()).toBeVisible();
+    await expect(ownerPage.duplicateErrorBanner()).toContainText(
+      'An owner with this name already exists. Please search for the existing owner.',
+    );
+
+    await page.screenshot({ path: testInfo.outputPath('create-duplicate-error.png'), fullPage: true });
+  });
+
+  test('blocks renaming an owner to a name and telephone that already belongs to another owner', async ({
+    page,
+  }, testInfo) => {
+    const ownerPage = new OwnerPage(page);
+    // Both owners get unique random telephones; firstOwner's data is then used to
+    // attempt a rename of secondOwner, triggering the duplicate detection
+    const firstOwner = createOwner({ firstName: 'Original', lastName: 'OwnerRecord' });
+    const secondOwner = createOwner({ firstName: 'Another', lastName: 'PersonRecord' });
+
+    // Create both owners
+    await ownerPage.openFindOwners();
+    await ownerPage.clickAddOwner();
+    await ownerPage.fillOwnerForm(firstOwner);
+    await ownerPage.submitOwnerForm();
+    await expect(page.getByRole('heading', { name: /Owner Information/i })).toBeVisible();
+
+    await ownerPage.openFindOwners();
+    await ownerPage.clickAddOwner();
+    await ownerPage.fillOwnerForm(secondOwner);
+    await ownerPage.submitOwnerForm();
+    await expect(page.getByRole('heading', { name: /Owner Information/i })).toBeVisible();
+
+    // Edit the second owner and rename to match the first owner's name + telephone
+    await ownerPage.clickEditOwner();
+    await ownerPage.fillOwnerForm({
+      ...secondOwner,
+      firstName: firstOwner.firstName,
+      lastName: firstOwner.lastName,
+      telephone: firstOwner.telephone,
+    });
+    await ownerPage.submitOwnerForm();
+
+    // Assert the duplicate error banner is shown
+    await expect(ownerPage.duplicateErrorBanner()).toBeVisible();
+    await expect(ownerPage.duplicateErrorBanner()).toContainText(
+      'An owner with this name already exists. Please search for the existing owner.',
+    );
+
+    await page.screenshot({ path: testInfo.outputPath('edit-duplicate-error.png'), fullPage: true });
+  });
+});

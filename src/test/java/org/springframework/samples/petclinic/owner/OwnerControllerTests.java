@@ -46,7 +46,10 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -98,6 +101,11 @@ class OwnerControllerTests {
 			.willReturn(new PageImpl<>(List.of(george)));
 
 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(george));
+
+		given(this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(anyString(), anyString(),
+				anyString()))
+			.willReturn(Optional.empty());
+
 		Visit visit = new Visit();
 		visit.setDate(LocalDate.now());
 		george.getPet("Max").getVisits().add(visit);
@@ -121,6 +129,43 @@ class OwnerControllerTests {
 				.param("city", "London")
 				.param("telephone", "1316761638"))
 			.andExpect(status().is3xxRedirection());
+	}
+
+	@Test
+	void testProcessCreationFormDuplicateOwner() throws Exception {
+		// Arrange
+		given(this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone("Joe", "Bloggs", "1316761638"))
+			.willReturn(Optional.of(george()));
+
+		// Act & Assert
+		mockMvc
+			.perform(post("/owners/new").param("firstName", "Joe")
+				.param("lastName", "Bloggs")
+				.param("address", "123 Caramel Street")
+				.param("city", "London")
+				.param("telephone", "1316761638"))
+			.andExpect(status().isOk())
+			.andExpect(model().hasErrors())
+			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
+	}
+
+	@Test
+	void testProcessCreationFormDbConstraintViolation() throws Exception {
+		// Arrange: application-level check passes but DB save throws due to race
+		// condition
+		willThrow(new DataIntegrityViolationException("unique constraint violation")).given(this.owners)
+			.save(any(Owner.class));
+
+		// Act & Assert
+		mockMvc
+			.perform(post("/owners/new").param("firstName", "Joe")
+				.param("lastName", "Bloggs")
+				.param("address", "123 Caramel Street")
+				.param("city", "London")
+				.param("telephone", "1316761638"))
+			.andExpect(status().isOk())
+			.andExpect(model().hasErrors())
+			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
 
 	@Test
@@ -267,6 +312,53 @@ class OwnerControllerTests {
 			.andExpect(model().attribute("owner",
 					hasProperty("pets", hasItem(hasProperty("visits", hasSize(greaterThan(0)))))))
 			.andExpect(view().name("owners/ownerDetails"));
+	}
+
+	@Test
+	void testProcessUpdateOwnerFormDuplicateOwner() throws Exception {
+		// Arrange: a second, different owner already has the target name+telephone
+		Owner conflicting = new Owner();
+		conflicting.setId(2);
+		conflicting.setFirstName("Joe");
+		conflicting.setLastName("Bloggs");
+		conflicting.setAddress("99 Other St.");
+		conflicting.setCity("London");
+		conflicting.setTelephone("1616291589");
+
+		given(this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone("Joe", "Bloggs", "1616291589"))
+			.willReturn(Optional.of(conflicting));
+
+		// Act & Assert: editing owner with TEST_OWNER_ID (1) to a name+telephone owned by
+		// id=2 must be blocked
+		mockMvc
+			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
+				.param("lastName", "Bloggs")
+				.param("address", "123 Caramel Street")
+				.param("city", "London")
+				.param("telephone", "1616291589"))
+			.andExpect(status().isOk())
+			.andExpect(model().hasErrors())
+			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
+	}
+
+	@Test
+	void testProcessUpdateOwnerFormDbConstraintViolation() throws Exception {
+		// Arrange: application-level check passes but DB save throws due to race
+		// condition
+		willThrow(new DataIntegrityViolationException("unique constraint violation")).given(this.owners)
+			.save(any(Owner.class));
+
+		// Act & Assert: editing owner with TEST_OWNER_ID (1) must surface the DB error as
+		// a form error
+		mockMvc
+			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
+				.param("lastName", "Bloggs")
+				.param("address", "123 Caramel Street")
+				.param("city", "London")
+				.param("telephone", "1616291589"))
+			.andExpect(status().isOk())
+			.andExpect(model().hasErrors())
+			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
 
 	@Test

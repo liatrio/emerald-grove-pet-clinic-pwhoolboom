@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -83,7 +84,22 @@ class OwnerController {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		}
 
-		this.owners.save(owner);
+		Optional<Owner> existingOwner = this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(
+				owner.getFirstName(), owner.getLastName(), owner.getTelephone());
+		if (existingOwner.isPresent()) {
+			result.reject("duplicate.owner",
+					"An owner with this name already exists. Please search for the existing owner.");
+			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		}
+
+		try {
+			this.owners.save(owner);
+		}
+		catch (DataIntegrityViolationException ex) {
+			result.reject("duplicate.owner",
+					"An owner with this name already exists. Please search for the existing owner.");
+			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		}
 		redirectAttributes.addFlashAttribute("message", "New Owner Created");
 		return "redirect:/owners/" + owner.getId();
 	}
@@ -189,8 +205,23 @@ class OwnerController {
 			return "redirect:/owners/{ownerId}/edit";
 		}
 
+		Optional<Owner> existingOwner = this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(
+				owner.getFirstName(), owner.getLastName(), owner.getTelephone());
+		if (existingOwner.isPresent() && !Objects.equals(existingOwner.get().getId(), ownerId)) {
+			result.reject("duplicate.owner",
+					"An owner with this name already exists. Please search for the existing owner.");
+			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		}
+
 		owner.setId(ownerId);
-		this.owners.save(owner);
+		try {
+			this.owners.save(owner);
+		}
+		catch (DataIntegrityViolationException ex) {
+			result.reject("duplicate.owner",
+					"An owner with this name already exists. Please search for the existing owner.");
+			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		}
 		redirectAttributes.addFlashAttribute("message", "Owner Values Updated");
 		return "redirect:/owners/{ownerId}";
 	}
