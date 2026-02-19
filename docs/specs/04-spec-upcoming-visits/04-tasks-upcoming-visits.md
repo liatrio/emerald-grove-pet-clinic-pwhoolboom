@@ -92,7 +92,7 @@
 
 ---
 
-### [ ] 4.0 Update Seed Data and Add Playwright E2E Test
+### [x] 4.0 Update Seed Data and Add Playwright E2E Test
 
 #### 4.0 Proof Artifact(s)
 
