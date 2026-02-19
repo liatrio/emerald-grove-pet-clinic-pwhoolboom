@@ -162,6 +162,19 @@ class PetController {
 		return "redirect:/owners/{ownerId}";
 	}
 
+	@PostMapping("/pets/{petId}/delete")
+	public String processDeleteForm(Owner owner, Pet pet, RedirectAttributes redirectAttributes) {
+		if (!pet.getVisits().isEmpty()) {
+			redirectAttributes.addFlashAttribute("error",
+					"Cannot delete " + pet.getName() + ": this pet has visit history.");
+			return "redirect:/owners/{ownerId}";
+		}
+		owner.removePet(pet);
+		this.owners.save(owner);
+		redirectAttributes.addFlashAttribute("message", "Pet " + pet.getName() + " has been successfully deleted.");
+		return "redirect:/owners/{ownerId}";
+	}
+
 	/**
 	 * Updates the pet details if it exists or adds a new pet to the owner.
 	 * @param owner The owner of the pet

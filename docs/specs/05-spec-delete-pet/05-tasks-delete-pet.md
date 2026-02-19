@@ -66,7 +66,7 @@
 
 ---
 
-### [ ] 2.0 Implement Delete Pet Endpoint in PetController (GREEN + REFACTOR Phase)
+### [x] 2.0 Implement Delete Pet Endpoint in PetController (GREEN + REFACTOR Phase)
 
 **Purpose:** Write the minimum production code to make all failing tests from Task 1.0 pass. Add `POST /owners/{ownerId}/pets/{petId}/delete` with server-side visit guard, JPA deletion via orphanRemoval, and flash message redirect.
 
@@ -77,13 +77,13 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 In `Owner.java`, update the `@OneToMany` annotation on the `pets` field to add `orphanRemoval = true`:
+- [x] 2.1 In `Owner.java`, update the `@OneToMany` annotation on the `pets` field to add `orphanRemoval = true`:
 
   ```java
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   ```
 
-- [ ] 2.2 In `Owner.java`, add a `removePet(Pet pet)` public method that removes the given pet from the `pets` list:
+- [x] 2.2 In `Owner.java`, add a `removePet(Pet pet)` public method that removes the given pet from the `pets` list:
 
   ```java
   public void removePet(Pet pet) {
@@ -91,7 +91,7 @@
   }
   ```
 
-- [ ] 2.3 In `PetController.java`, add the delete handler method. The `owner` and `pet` parameters are automatically populated by the existing `@ModelAttribute` methods (`findOwner()` and `findPet()`), which also handle the ownership check (404 if pet not found for that owner):
+- [x] 2.3 In `PetController.java`, add the delete handler method. The `owner` and `pet` parameters are automatically populated by the existing `@ModelAttribute` methods (`findOwner()` and `findPet()`), which also handle the ownership check (404 if pet not found for that owner):
 
   ```java
   @PostMapping("/pets/{petId}/delete")
@@ -109,8 +109,8 @@
   }
   ```
 
-- [ ] 2.4 Run `./mvnw test -Dtest=PetControllerTests` — all tests (including the three new ones from Task 1.0) must now **pass**. If any test still fails, diagnose and fix before continuing.
-- [ ] 2.5 Run the full test suite `./mvnw test` and confirm it exits with `BUILD SUCCESS` with zero test failures.
+- [x] 2.4 Run `./mvnw test -Dtest=PetControllerTests` — all tests (including the three new ones from Task 1.0) must now **pass**. If any test still fails, diagnose and fix before continuing.
+- [x] 2.5 Run the full test suite `./mvnw test` and confirm it exits with `BUILD SUCCESS` with zero test failures.
 
 ---
 
