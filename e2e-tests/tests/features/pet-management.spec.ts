@@ -5,6 +5,7 @@ import { test, expect } from '@fixtures/base-test';
 import { OwnerPage } from '@pages/owner-page';
 import { PetPage } from '@pages/pet-page';
 import { createPet } from '@utils/pet-factory';
+import { futureDate } from '@utils/test-helpers';
 
 test.describe('Pet Management', () => {
   test('can add a pet to an existing owner and see it on owner details', async ({ page }, testInfo) => {
@@ -37,13 +38,14 @@ test.describe('Pet Management', () => {
 
     await petRow.getByRole('link', { name: /Add Visit/i }).first().click();
 
-    await page.locator('input#date').fill('2024-01-01');
+    const visitDate = futureDate();
+    await page.locator('input#date').fill(visitDate);
     await page.locator('input#description').fill('Annual checkup');
     await page.screenshot({ path: testInfo.outputPath('visit-add-form-filled.png'), fullPage: true });
     await page.getByRole('button', { name: /Add Visit/i }).click();
 
     await expect(page.getByRole('heading', { name: /Pets and Visits/i })).toBeVisible();
-    await expect(petRow.getByRole('cell', { name: '2024-01-01', exact: true })).toBeVisible();
+    await expect(petRow.getByRole('cell', { name: visitDate, exact: true })).toBeVisible();
     await expect(petRow.getByRole('cell', { name: 'Annual checkup', exact: true })).toBeVisible();
 
     await page.screenshot({ path: testInfo.outputPath('pet-details-with-visit-history.png'), fullPage: true });

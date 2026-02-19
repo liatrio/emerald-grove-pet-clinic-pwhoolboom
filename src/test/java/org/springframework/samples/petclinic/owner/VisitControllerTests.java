@@ -32,7 +32,10 @@ import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.Optional;
+
+import org.junit.jupiter.api.Nested;
 
 /**
  * Test class for {@link VisitController}
@@ -95,6 +98,46 @@ class VisitControllerTests {
 	void testAddVisitToNonExistentPet() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, 99999))
 			.andExpect(status().isNotFound());
+	}
+
+	@Nested
+	class ProcessNewVisitFormDateValidation {
+
+		@Test
+		void testProcessNewVisitFormWithPastDate() throws Exception {
+			String pastDate = LocalDate.now().minusDays(1).toString();
+			mockMvc
+				.perform(post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID)
+					.param("date", pastDate)
+					.param("description", "Visit Description"))
+				.andExpect(status().isOk())
+				.andExpect(model().attributeHasFieldErrors("visit", "date"))
+				.andExpect(model().attributeHasFieldErrorCode("visit", "date", "visitDate.pastNotAllowed"))
+				.andExpect(view().name("pets/createOrUpdateVisitForm"));
+		}
+
+		@Test
+		void testProcessNewVisitFormWithTodayDate() throws Exception {
+			String todayDate = LocalDate.now().toString();
+			mockMvc
+				.perform(post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID)
+					.param("date", todayDate)
+					.param("description", "Visit Description"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/owners/{ownerId}"));
+		}
+
+		@Test
+		void testProcessNewVisitFormWithFutureDate() throws Exception {
+			String futureDate = LocalDate.now().plusYears(1).toString();
+			mockMvc
+				.perform(post("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID)
+					.param("date", futureDate)
+					.param("description", "Visit Description"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/owners/{ownerId}"));
+		}
+
 	}
 
 }

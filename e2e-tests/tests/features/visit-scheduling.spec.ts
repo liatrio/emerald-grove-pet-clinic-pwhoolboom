@@ -1,6 +1,20 @@
+import { fileURLToPath } from 'url';
+
 import { test, expect } from '@fixtures/base-test';
 
 import { VisitPage } from '@pages/visit-page';
+import { futureDate } from '@utils/test-helpers';
+
+function todayDate(): string {
+  const d = new Date();
+  return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
+}
+
+function yesterdayDate(): string {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
+}
 
 test.describe('Visit Scheduling', () => {
   test('can schedule a visit for an existing pet', async ({ page }, testInfo) => {
@@ -27,7 +41,7 @@ test.describe('Visit Scheduling', () => {
 
     await expect(visitPage.heading()).toBeVisible();
 
-    const visitDate = '2024-02-02';
+    const visitDate = futureDate();
     const description = `E2E visit ${Date.now()}`;
     await visitPage.fillVisitDate(visitDate);
     await visitPage.fillDescription(description);
@@ -54,9 +68,59 @@ test.describe('Visit Scheduling', () => {
 
     await page.getByRole('link', { name: /Add Visit/i }).first().click();
 
-    await visitPage.fillVisitDate('2024-03-03');
+    await visitPage.fillVisitDate(futureDate());
     await visitPage.submit();
 
     await expect(page.getByText(/must not be blank/i)).toBeVisible();
+  });
+
+  test('rejects a past date and shows a validation error', async ({ page }) => {
+    const visitPage = new VisitPage(page);
+    await page.goto('/owners/1');
+    await expect(page.getByRole('heading', { name: /Owner Information/i })).toBeVisible();
+
+    await page.getByRole('link', { name: /Add Visit/i }).first().click();
+
+    await visitPage.fillVisitDate(yesterdayDate());
+    await visitPage.fillDescription('Past date test');
+    await visitPage.submit();
+
+    await expect(page.locator('.form-group.has-error').filter({ has: page.locator('input#date') })).toBeVisible();
+
+    const screenshotPath = fileURLToPath(
+      new URL(
+        '../../../docs/specs/06-spec-visit-date-validation/proof/past-date-validation-error.png',
+        import.meta.url
+      )
+    );
+    await page.screenshot({ path: screenshotPath, fullPage: false });
+  });
+
+  test("accepts today's date and redirects to the owner page", async ({ page }) => {
+    const visitPage = new VisitPage(page);
+    await page.goto('/owners/1');
+    await expect(page.getByRole('heading', { name: /Owner Information/i })).toBeVisible();
+
+    await page.getByRole('link', { name: /Add Visit/i }).first().click();
+
+    await visitPage.fillVisitDate(todayDate());
+    await visitPage.fillDescription('Same-day urgent visit');
+    await visitPage.submit();
+
+    await expect(page.getByRole('heading', { name: /Pets and Visits/i })).toBeVisible();
+  });
+
+  test('accepts a future date and redirects to the owner page', async ({ page }) => {
+    const visitPage = new VisitPage(page);
+    await page.goto('/owners/1');
+    await expect(page.getByRole('heading', { name: /Owner Information/i })).toBeVisible();
+
+    await page.getByRole('link', { name: /Add Visit/i }).first().click();
+
+    await visitPage.fillVisitDate(futureDate());
+    await visitPage.fillDescription('Scheduled future visit');
+    await visitPage.submit();
+
+    await expect(page.getByRole('heading', { name: /Pets and Visits/i })).toBeVisible();
   });
 });
