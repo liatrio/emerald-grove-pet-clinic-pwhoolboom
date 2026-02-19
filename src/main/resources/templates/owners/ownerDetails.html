@@ -71,12 +71,46 @@
           <tr>
             <td><a th:href="@{__${owner.id}__/pets/__${pet.id}__/edit}" th:text="#{editPet}">Edit Pet</a></td>
             <td><a th:href="@{__${owner.id}__/pets/__${pet.id}__/visits/new}" th:text="#{addVisit}">Add Visit</a></td>
+            <td>
+              <button th:if="${pet.visits.isEmpty()}" class="btn btn-danger btn-sm"
+                      th:data-pet-name="${pet.name}"
+                      th:data-action-url="@{__${owner.id}__/pets/__${pet.id}__/delete}"
+                      data-bs-toggle="modal" data-bs-target="#deletePetModal"
+                      th:text="#{deletePet}">Delete Pet</button>
+              <button th:unless="${pet.visits.isEmpty()}" class="btn btn-secondary btn-sm" disabled
+                      th:title="#{deletePet.blocked.tooltip}"
+                      th:text="#{deletePet}">Delete Pet</button>
+            </td>
           </tr>
         </table>
       </td>
     </tr>
 
   </table>
+  <div class="modal fade" id="deletePetModal" tabindex="-1"
+       aria-labelledby="deletePetModalLabel" aria-hidden="true"
+       th:data-confirm-template="#{deletePet.confirm.body}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deletePetModalLabel" th:text="#{deletePet.confirm.title}">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p id="deletePetModalBody"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal" th:text="#{deletePet.confirm.cancel}">Cancel</button>
+          <form id="deletePetForm" method="post">
+            <button type="submit" class="btn btn-danger"
+                    th:text="#{deletePet.confirm.button}">Confirm Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Function to hide the success and error messages after 3 seconds
     function hideMessages() {
@@ -94,6 +128,22 @@
 
     // Call the function to hide messages
     hideMessages();
+
+    // Populate delete pet modal with pet name and form action
+    document.addEventListener('DOMContentLoaded', function () {
+      var deletePetModal = document.getElementById('deletePetModal');
+      if (deletePetModal) {
+        deletePetModal.addEventListener('show.bs.modal', function (event) {
+          var button = event.relatedTarget;
+          var petName = button.getAttribute('data-pet-name');
+          var actionUrl = button.getAttribute('data-action-url');
+          var template = deletePetModal.getAttribute('data-confirm-template');
+          document.getElementById('deletePetModalBody').textContent =
+            template.replace('{0}', petName);
+          document.getElementById('deletePetForm').setAttribute('action', actionUrl);
+        });
+      }
+    });
   </script>
 
 </body>

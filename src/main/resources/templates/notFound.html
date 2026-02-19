@@ -7,11 +7,11 @@
     <div class="liatrio-error-card">
       <img src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}"
         alt="Pets at the clinic" />
-      <h2>Oops! We couldn't find that pet or owner.</h2>
+      <h2 th:text="#{notFound.heading}">Oops! We couldn't find that pet or owner.</h2>
 
-      <p>Let's help you search again.</p>
+      <p th:text="#{notFound.body}">Let's help you search again.</p>
 
-      <a th:href="@{/owners/find}" class="btn btn-primary">Find Owners</a>
+      <a th:href="@{/owners/find}" class="btn btn-primary" th:text="#{notFound.findOwners}">Find Owners</a>
     </div>
   </section>
 </body>
