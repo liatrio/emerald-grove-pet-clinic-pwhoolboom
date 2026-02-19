@@ -293,6 +293,33 @@ class OwnerControllerTests {
 	}
 
 	@Test
+	void testProcessUpdateOwnerFormDuplicateOwner() throws Exception {
+		// Arrange: a second, different owner already has the target name+telephone
+		Owner conflicting = new Owner();
+		conflicting.setId(2);
+		conflicting.setFirstName("Joe");
+		conflicting.setLastName("Bloggs");
+		conflicting.setAddress("99 Other St.");
+		conflicting.setCity("London");
+		conflicting.setTelephone("1616291589");
+
+		given(this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone("Joe", "Bloggs", "1616291589"))
+			.willReturn(Optional.of(conflicting));
+
+		// Act & Assert: editing owner with TEST_OWNER_ID (1) to a name+telephone owned by
+		// id=2 must be blocked
+		mockMvc
+			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
+				.param("lastName", "Bloggs")
+				.param("address", "123 Caramel Street")
+				.param("city", "London")
+				.param("telephone", "1616291589"))
+			.andExpect(status().isOk())
+			.andExpect(model().hasErrors())
+			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
+	}
+
+	@Test
 	public void testProcessUpdateOwnerFormWithIdMismatch() throws Exception {
 		int pathOwnerId = 1;
 

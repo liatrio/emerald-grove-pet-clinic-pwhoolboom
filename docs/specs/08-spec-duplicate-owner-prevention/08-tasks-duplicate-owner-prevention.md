@@ -144,7 +144,7 @@
 
 ---
 
-### [ ] 3.0 [RED] Write failing JUnit test for edit duplicate detection
+### [x] 3.0 [RED] Write failing JUnit test for edit duplicate detection
 
 #### 3.0 Proof Artifact(s)
 
@@ -152,7 +152,7 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 In `OwnerControllerTests.java`, add the following new test method after `testProcessUpdateOwnerFormHasErrors()`:
+- [x] 3.1 In `OwnerControllerTests.java`, add the following new test method after `testProcessUpdateOwnerFormHasErrors()`:
 
   ```java
   @Test
@@ -183,7 +183,7 @@
   }
   ```
 
-- [ ] 3.2 Run the new test and confirm it fails (the edit controller currently saves without checking, so it redirects instead of returning HTTP 200):
+- [x] 3.2 Run the new test and confirm it fails (the edit controller currently saves without checking, so it redirects instead of returning HTTP 200):
 
   ```bash
   ./mvnw test -Dtest="OwnerControllerTests#testProcessUpdateOwnerFormDuplicateOwner"
