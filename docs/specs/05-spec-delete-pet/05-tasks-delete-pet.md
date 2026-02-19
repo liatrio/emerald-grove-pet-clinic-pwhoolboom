@@ -114,7 +114,7 @@
 
 ---
 
-### [ ] 3.0 Update Owner Details UI — Delete Button, Bootstrap Modal, and i18n
+### [x] 3.0 Update Owner Details UI — Delete Button, Bootstrap Modal, and i18n
 
 **Purpose:** Add the "Delete Pet" button to each pet row on the owner details page. Active (red) for pets with no visits; disabled with tooltip for pets with visits. Add a shared Bootstrap 5 modal confirmation dialog. Add all required i18n message keys to all 9 locale files.
 
@@ -126,7 +126,7 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 Add the following new keys to `src/main/resources/messages/messages.properties`:
+- [x] 3.1Add the following new keys to `src/main/resources/messages/messages.properties`:
 
   ```properties
   deletePet=Delete Pet
@@ -137,9 +137,9 @@
   deletePet.blocked.tooltip=Cannot delete: this pet has visit history.
   ```
 
-- [ ] 3.2 Add the same six keys with the same English text as placeholder values to each of these 7 locale files: `messages_de.properties`, `messages_es.properties`, `messages_fa.properties`, `messages_ko.properties`, `messages_pt.properties`, `messages_ru.properties`, `messages_tr.properties`. Also add them to `messages_en.properties` for completeness (it is excluded from the sync check but should stay consistent).
-- [ ] 3.3 Run `./mvnw test -Dtest=I18nPropertiesSyncTest` to confirm the sync test passes before touching the HTML.
-- [ ] 3.4 In `ownerDetails.html`, locate the inner table row that contains the "Edit Pet" and "Add Visit" action links:
+- [x] 3.2Add the same six keys with the same English text as placeholder values to each of these 7 locale files: `messages_de.properties`, `messages_es.properties`, `messages_fa.properties`, `messages_ko.properties`, `messages_pt.properties`, `messages_ru.properties`, `messages_tr.properties`. Also add them to `messages_en.properties` for completeness (it is excluded from the sync check but should stay consistent).
+- [x] 3.3Run `./mvnw test -Dtest=I18nPropertiesSyncTest` to confirm the sync test passes before touching the HTML.
+- [x] 3.4In `ownerDetails.html`, locate the inner table row that contains the "Edit Pet" and "Add Visit" action links:
 
   ```html
   <tr>
@@ -151,7 +151,7 @@
   Add a third `<td>` after the "Add Visit" cell. Inside it, render two mutually exclusive buttons using `th:if` / `th:unless` based on whether `pet.visits` is empty:
   - **Active button** (shown when `${pet.visits.isEmpty()}`): styled `btn btn-danger btn-sm`, with `th:data-pet-name="${pet.name}"`, `th:data-action-url="@{__${owner.id}__/pets/__${pet.id}__/delete}"`, `data-bs-toggle="modal"`, `data-bs-target="#deletePetModal"`, and `th:text="#{deletePet}"`.
   - **Disabled button** (shown when `!${pet.visits.isEmpty()}`): styled `btn btn-secondary btn-sm`, `disabled` attribute, `th:title="#{deletePet.blocked.tooltip}"`, and `th:text="#{deletePet}"`.
-- [ ] 3.5 Add the Bootstrap 5 modal markup to `ownerDetails.html` **before the `</body>` closing tag** (after the existing `<script>` block). The modal must use `th:text="#{...}"` on all visible text elements to satisfy the i18n lint check. Include a hidden CSRF input (`th:name="${_csrf.parameterName}"` and `th:value="${_csrf.token}"`) inside the form. The modal's `<div>` element should carry `th:data-confirm-template="#{deletePet.confirm.body}"` so JavaScript can read the localized template string:
+- [x] 3.5Add the Bootstrap 5 modal markup to `ownerDetails.html` **before the `</body>` closing tag** (after the existing `<script>` block). The modal must use `th:text="#{...}"` on all visible text elements to satisfy the i18n lint check. Include a hidden CSRF input (`th:name="${_csrf.parameterName}"` and `th:value="${_csrf.token}"`) inside the form. The modal's `<div>` element should carry `th:data-confirm-template="#{deletePet.confirm.body}"` so JavaScript can read the localized template string:
 
   ```html
   <div class="modal fade" id="deletePetModal" tabindex="-1"
@@ -180,7 +180,7 @@
   </div>
   ```
 
-- [ ] 3.6 In the existing `<script>` block in `ownerDetails.html`, add a `DOMContentLoaded` listener that intercepts the Bootstrap modal's `show.bs.modal` event. When the event fires, read `data-pet-name` and `data-action-url` from the triggering button, set the modal body text by replacing `{0}` in the i18n template string with the pet name, and set the form `action` attribute to the delete URL:
+- [x] 3.6In the existing `<script>` block in `ownerDetails.html`, add a `DOMContentLoaded` listener that intercepts the Bootstrap modal's `show.bs.modal` event. When the event fires, read `data-pet-name` and `data-action-url` from the triggering button, set the modal body text by replacing `{0}` in the i18n template string with the pet name, and set the form `action` attribute to the delete URL:
 
   ```javascript
   document.addEventListener('DOMContentLoaded', function () {
@@ -199,7 +199,7 @@
   });
   ```
 
-- [ ] 3.7 Run `./mvnw test` to confirm the full suite passes, including `I18nPropertiesSyncTest.checkNonInternationalizedStrings` (no hardcoded HTML text) and `I18nPropertiesSyncTest.checkI18nPropertyFilesAreInSync` (all locale files in sync).
+- [x] 3.7Run `./mvnw test` to confirm the full suite passes, including `I18nPropertiesSyncTest.checkNonInternationalizedStrings` (no hardcoded HTML text) and `I18nPropertiesSyncTest.checkI18nPropertyFilesAreInSync` (all locale files in sync).
 
 ---
 
