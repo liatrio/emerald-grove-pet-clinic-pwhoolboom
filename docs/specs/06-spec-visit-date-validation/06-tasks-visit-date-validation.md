@@ -119,7 +119,7 @@ Add the past-date guard to `VisitController` and populate the message key in all
 
 ---
 
-### [ ] 3.0 Add Playwright E2E Tests for Visit Date Validation
+### [x] 3.0 Add Playwright E2E Tests for Visit Date Validation
 
 Fix two existing E2E tests that use hardcoded past dates (they will break once the validation is live), then add three new browser-level tests covering the past/today/future date scenarios.
 
@@ -130,8 +130,8 @@ Fix two existing E2E tests that use hardcoded past dates (they will break once t
 
 #### 3.0 Tasks
 
-- [ ] 3.1 Create the directory `docs/specs/06-spec-visit-date-validation/proof/` (if not already created in Task 2.0). This directory must exist before the screenshot can be written by the Playwright test.
-- [ ] 3.2 Open `e2e-tests/tests/features/visit-scheduling.spec.ts`. The existing `'can schedule a visit for an existing pet'` test uses the hardcoded past date `'2024-02-02'`. Replace it with a dynamic future date using:
+- [x] 3.1 Create the directory `docs/specs/06-spec-visit-date-validation/proof/` (if not already created in Task 2.0). This directory must exist before the screenshot can be written by the Playwright test.
+- [x] 3.2 Open `e2e-tests/tests/features/visit-scheduling.spec.ts`. The existing `'can schedule a visit for an existing pet'` test uses the hardcoded past date `'2024-02-02'`. Replace it with a dynamic future date using:
 
   ```typescript
   const future = new Date();
@@ -144,14 +144,14 @@ Fix two existing E2E tests that use hardcoded past dates (they will break once t
   ```
 
   Update the `visitDate` variable and the assertion that looks for `visitDate` in the visit row to use this dynamic value.
-- [ ] 3.3 Open `e2e-tests/tests/features/pet-management.spec.ts`. The `'can add a pet to an existing owner'` test uses the hardcoded past date `'2024-01-01'` on the visit add form (line `await page.locator('input#date').fill('2024-01-01')`). Replace it with a dynamic future date using the same pattern as step 3.2, and update any assertion that checks for that specific date string.
-- [ ] 3.4 At the top of `visit-scheduling.spec.ts`, add the following import (after the existing imports) — this is needed to write the proof screenshot to an absolute path:
+- [x] 3.3 Open `e2e-tests/tests/features/pet-management.spec.ts`. The `'can add a pet to an existing owner'` test uses the hardcoded past date `'2024-01-01'` on the visit add form (line `await page.locator('input#date').fill('2024-01-01')`). Replace it with a dynamic future date using the same pattern as step 3.2, and update any assertion that checks for that specific date string.
+- [x] 3.4 At the top of `visit-scheduling.spec.ts`, add the following import (after the existing imports) — this is needed to write the proof screenshot to an absolute path:
 
   ```typescript
   import { fileURLToPath } from 'url';
   ```
 
-- [ ] 3.5 Inside the `test.describe('Visit Scheduling', ...)` block in `visit-scheduling.spec.ts`, add a new test `'rejects a past date and shows a validation error'`:
+- [x] 3.5 Inside the `test.describe('Visit Scheduling', ...)` block in `visit-scheduling.spec.ts`, add a new test `'rejects a past date and shows a validation error'`:
   - Compute yesterday's date as a `YYYY-MM-DD` string using the same numeric pattern as step 3.2 but with `date.setDate(date.getDate() - 1)`.
   - Navigate to `/owners/1`.
   - Click the first `Add Visit` link.
@@ -171,12 +171,12 @@ Fix two existing E2E tests that use hardcoded past dates (they will break once t
     await page.screenshot({ path: screenshotPath, fullPage: false });
     ```
 
-- [ ] 3.6 Add a new test `'accepts today\'s date and redirects to the owner page'`:
+- [x] 3.6 Add a new test `'accepts today\'s date and redirects to the owner page'`:
   - Compute today's date as a `YYYY-MM-DD` string.
   - Navigate to `/owners/1`, click `Add Visit`, fill in today's date and a valid description, then submit.
   - Assert `page.getByRole('heading', { name: /Pets and Visits/i })` is visible (confirms redirect to owner detail page).
-- [ ] 3.7 Add a new test `'accepts a future date and redirects to the owner page'`:
+- [x] 3.7 Add a new test `'accepts a future date and redirects to the owner page'`:
   - Compute a future date (e.g., one year from today) as a `YYYY-MM-DD` string.
   - Navigate to `/owners/1`, click `Add Visit`, fill in the future date and a valid description, then submit.
   - Assert `page.getByRole('heading', { name: /Pets and Visits/i })` is visible.
-- [ ] 3.8 From inside the `e2e-tests/` directory, run `npm test`. Confirm all tests pass. If any pre-existing test fails due to a past date that was not updated, find and fix the hardcoded date in that test file, then re-run.
+- [x] 3.8 From inside the `e2e-tests/` directory, run `npm test`. Confirm all tests pass. If any pre-existing test fails due to a past date that was not updated, find and fix the hardcoded date in that test file, then re-run.
