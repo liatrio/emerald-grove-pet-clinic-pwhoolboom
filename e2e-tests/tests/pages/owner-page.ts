@@ -60,4 +60,20 @@ export class OwnerPage extends BasePage {
   async clickEditOwner(): Promise<void> {
     await this.page.getByRole('link', { name: /Edit Owner/i }).click();
   }
+
+  paginationControls(): Locator {
+    return this.page.locator('div.liatrio-pagination');
+  }
+
+  async clickNextPage(): Promise<void> {
+    await this.page.locator('div.liatrio-pagination a[title="Next"]').click();
+  }
+
+  async clickPreviousPage(): Promise<void> {
+    await this.page.locator('div.liatrio-pagination a[title="Previous"]').click();
+  }
+
+  activeFilterBadge(): Locator {
+    return this.page.locator('.liatrio-active-filter');
+  }
 }

@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -33,6 +34,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
@@ -40,6 +42,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -141,7 +144,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
-		Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()));
+		Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
 		when(this.owners.findByLastNameStartingWith(anyString(), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
 	}
@@ -165,6 +168,44 @@ class OwnerControllerTests {
 			.andExpect(model().attributeHasFieldErrorCode("owner", "lastName", "notFound"))
 			.andExpect(view().name("owners/findOwners"));
 
+	}
+
+	@Test
+	void testPaginationModelIncludesLastNameWhenFilterActive() throws Exception {
+		// Arrange
+		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
+		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(multiPage);
+
+		// Act & Assert
+		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"))
+			.andExpect(model().attribute("lastName", "Franklin"));
+	}
+
+	@Test
+	void testPaginationModelHasNullLastNameWhenNoFilterActive() throws Exception {
+		// Arrange
+		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
+		when(this.owners.findByLastNameStartingWith(eq(""), any(Pageable.class))).thenReturn(multiPage);
+
+		// Act & Assert
+		mockMvc.perform(get("/owners?page=1"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"))
+			.andExpect(model().attribute("lastName", nullValue()));
+	}
+
+	@Test
+	void testPaginationLinksIncludeLastNameWhenFilterActive() throws Exception {
+		// Arrange
+		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
+		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(multiPage);
+
+		// Act & Assert
+		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("lastName=Franklin")));
 	}
 
 	@Test
