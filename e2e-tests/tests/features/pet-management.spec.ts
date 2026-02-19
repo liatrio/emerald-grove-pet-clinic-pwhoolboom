@@ -5,6 +5,7 @@ import { test, expect } from '@fixtures/base-test';
 import { OwnerPage } from '@pages/owner-page';
 import { PetPage } from '@pages/pet-page';
 import { createPet } from '@utils/pet-factory';
+import { futureDate } from '@utils/test-helpers';
 
 test.describe('Pet Management', () => {
   test('can add a pet to an existing owner and see it on owner details', async ({ page }, testInfo) => {
@@ -37,13 +38,7 @@ test.describe('Pet Management', () => {
 
     await petRow.getByRole('link', { name: /Add Visit/i }).first().click();
 
-    const visitDate = (() => {
-      const d = new Date();
-      d.setFullYear(d.getFullYear() + 1);
-      return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join(
-        '-'
-      );
-    })();
+    const visitDate = futureDate();
     await page.locator('input#date').fill(visitDate);
     await page.locator('input#description').fill('Annual checkup');
     await page.screenshot({ path: testInfo.outputPath('visit-add-form-filled.png'), fullPage: true });

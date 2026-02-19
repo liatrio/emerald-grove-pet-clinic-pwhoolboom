@@ -3,12 +3,7 @@ import { fileURLToPath } from 'url';
 import { test, expect } from '@fixtures/base-test';
 
 import { VisitPage } from '@pages/visit-page';
-
-function futureDate(): string {
-  const d = new Date();
-  d.setFullYear(d.getFullYear() + 1);
-  return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
-}
+import { futureDate } from '@utils/test-helpers';
 
 function todayDate(): string {
   const d = new Date();
@@ -90,7 +85,7 @@ test.describe('Visit Scheduling', () => {
     await visitPage.fillDescription('Past date test');
     await visitPage.submit();
 
-    await expect(page.getByText(/Invalid date: please choose today or a future date/i)).toBeVisible();
+    await expect(page.locator('.form-group.has-error').filter({ has: page.locator('input#date') })).toBeVisible();
 
     const screenshotPath = fileURLToPath(
       new URL(
