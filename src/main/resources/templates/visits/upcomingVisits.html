@@ -1,16 +1,44 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'visits')}">
+
 <body>
-  <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
-  <table>
-    <tbody>
-      <tr th:each="v : ${upcomingVisits}">
-        <td th:text="${v.ownerName}"></td>
-        <td th:text="${v.petName}"></td>
-        <td th:text="${v.date}"></td>
-        <td th:text="${v.description}"></td>
-      </tr>
-    </tbody>
-  </table>
+
+  <section class="liatrio-section">
+    <div class="liatrio-table-card">
+      <div class="liatrio-card-header">
+        <h2 th:text="#{upcomingVisits}">Upcoming Visits</h2>
+        <p class="liatrio-muted" th:if="${days != null}" th:text="#{upcomingVisits.subtitle(${days})}">Appointments scheduled within the next 7 days.</p>
+      </div>
+
+      <div th:if="${errorMessage != null}">
+        <p class="liatrio-muted" th:text="${#messages.msg(errorMessage)}">Error</p>
+      </div>
+
+      <table th:if="${upcomingVisits != null}" class="table table-striped liatrio-table">
+        <thead>
+          <tr>
+            <th th:text="#{owner}">Owner</th>
+            <th th:text="#{pet}">Pet</th>
+            <th th:text="#{date}">Date</th>
+            <th th:text="#{description}">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="v : ${upcomingVisits}">
+            <td><a th:href="@{/owners/{id}(id=${v.ownerId})}" th:text="${v.ownerName}"></a></td>
+            <td><a th:href="@{/owners/{id}(id=${v.ownerId})}" th:text="${v.petName}"></a></td>
+            <td th:text="${v.date}"></td>
+            <td th:text="${v.description}"></td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(upcomingVisits)}">
+            <td colspan="4" th:text="#{upcomingVisits.empty(${days})}">No upcoming visits.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
 </body>
+
 </html>

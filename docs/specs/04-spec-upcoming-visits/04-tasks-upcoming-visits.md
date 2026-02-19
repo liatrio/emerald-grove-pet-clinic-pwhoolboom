@@ -66,7 +66,7 @@
 
 ---
 
-### [ ] 3.0 Create Thymeleaf Template, i18n Keys, and Navigation Link
+### [x] 3.0 Create Thymeleaf Template, i18n Keys, and Navigation Link
 
 #### 3.0 Proof Artifact(s)
 
