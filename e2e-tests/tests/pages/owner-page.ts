@@ -76,4 +76,8 @@ export class OwnerPage extends BasePage {
   activeFilterBadge(): Locator {
     return this.page.locator('.liatrio-active-filter');
   }
+
+  duplicateErrorBanner(): Locator {
+    return this.page.locator('.alert.alert-danger');
+  }
 }

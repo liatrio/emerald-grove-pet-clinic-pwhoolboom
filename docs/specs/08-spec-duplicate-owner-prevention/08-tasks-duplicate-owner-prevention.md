@@ -235,7 +235,7 @@
 
 ---
 
-### [ ] 5.0 Add Playwright E2E tests for create and edit duplicate prevention
+### [x] 5.0 Add Playwright E2E tests for create and edit duplicate prevention
 
 #### 5.0 Proof Artifact(s)
 
@@ -245,7 +245,7 @@
 
 #### 5.0 Tasks
 
-- [ ] 5.1 In `e2e-tests/tests/pages/owner-page.ts`, add a locator helper method at the end of the `OwnerPage` class (before the closing `}`):
+- [x] 5.1 In `e2e-tests/tests/pages/owner-page.ts`, add a locator helper method at the end of the `OwnerPage` class (before the closing `}`):
 
   ```typescript
   duplicateErrorBanner(): Locator {
@@ -253,7 +253,7 @@
   }
   ```
 
-- [ ] 5.2 In `e2e-tests/tests/features/owner-management.spec.ts`, add a new `describe` block at the end of the file (after the closing `}` of the existing `Owner Management` block):
+- [x] 5.2 In `e2e-tests/tests/features/owner-management.spec.ts`, add a new `describe` block at the end of the file (after the closing `}` of the existing `Owner Management` block):
 
   ```typescript
   test.describe('Duplicate Owner Prevention', () => {
@@ -335,19 +335,19 @@
   });
   ```
 
-- [ ] 5.3 Create the proof artifacts directory:
+- [x] 5.3 Create the proof artifacts directory:
 
   ```bash
   mkdir -p docs/specs/08-spec-duplicate-owner-prevention/08-proofs
   ```
 
-- [ ] 5.4 Start the application if it isn't already running:
+- [x] 5.4 Start the application if it isn't already running:
 
   ```bash
   ./mvnw spring-boot:run
   ```
 
-- [ ] 5.5 Run only the duplicate E2E tests from the `e2e-tests/` directory:
+- [x] 5.5 Run only the duplicate E2E tests from the `e2e-tests/` directory:
 
   ```bash
   cd e2e-tests && npm test -- --grep "Duplicate Owner"
@@ -355,7 +355,7 @@
 
   Expected: both tests pass.
 
-- [ ] 5.6 Copy the Playwright-generated screenshots to the proofs directory. Playwright saves test screenshots to `e2e-tests/test-results/`. Locate the two screenshots and copy them:
+- [x] 5.6 Copy the Playwright-generated screenshots to the proofs directory. Playwright saves test screenshots to `e2e-tests/test-results/`. Locate the two screenshots and copy them:
 
   ```bash
   cp e2e-tests/test-results/**/create-duplicate-error.png \
@@ -364,7 +364,7 @@
      docs/specs/08-spec-duplicate-owner-prevention/08-proofs/05-e2e-edit-duplicate.png
   ```
 
-- [ ] 5.7 Run the full E2E suite to confirm no regressions in existing tests:
+- [x] 5.7 Run the full E2E suite to confirm no regressions in existing tests:
 
   ```bash
   cd e2e-tests && npm test
