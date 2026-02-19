@@ -1,6 +1,9 @@
+import { fileURLToPath } from 'url';
+
 import { test, expect } from '@fixtures/base-test';
 
 import { OwnerPage } from '@pages/owner-page';
+import { PetPage } from '@pages/pet-page';
 import { createPet } from '@utils/pet-factory';
 
 test.describe('Pet Management', () => {
@@ -44,6 +47,51 @@ test.describe('Pet Management', () => {
     await expect(petRow.getByRole('cell', { name: 'Annual checkup', exact: true })).toBeVisible();
 
     await page.screenshot({ path: testInfo.outputPath('pet-details-with-visit-history.png'), fullPage: true });
+  });
+
+  test('can delete a pet with no visit history and verify it is removed', async ({ page }) => {
+    const ownerPage = new OwnerPage(page);
+    const petPage = new PetPage(page);
+    const pet = createPet({ type: 'cat' });
+
+    // Navigate to Betty Davis's owner details page
+    await ownerPage.openFindOwners();
+    await ownerPage.searchByLastName('Davis');
+    await ownerPage.openOwnerDetailsByName('Betty Davis');
+
+    // Add a new pet with no visit history
+    await page.getByRole('link', { name: /Add New Pet/i }).click();
+    await page.locator('input#name').fill(pet.name);
+    await page.locator('input#birthDate').fill(pet.birthDate);
+    await page.locator('select#type').selectOption({ label: pet.type });
+    await page.getByRole('button', { name: /Add Pet/i }).click();
+
+    // Verify the pet appears on the owner details page
+    await expect(page.getByRole('heading', { name: /Pets and Visits/i })).toBeVisible();
+    await expect(page.getByText(pet.name, { exact: true })).toBeVisible();
+
+    // Click the Delete Pet button — modal should appear
+    await petPage.clickDeletePetButton(pet.name);
+
+    // Wait for the modal to be visible, then capture a screenshot as proof artifact
+    await expect(page.locator('#deletePetModal')).toBeVisible();
+    const screenshotPath = fileURLToPath(
+      new URL(
+        '../../../docs/specs/05-spec-delete-pet/05-proofs/05-delete-pet-confirmation-modal.png',
+        import.meta.url
+      )
+    );
+    await page.screenshot({ path: screenshotPath, fullPage: false });
+
+    // Confirm deletion
+    await petPage.confirmDeletion();
+
+    // Assert redirect back to owner details with success flash message
+    await expect(page.getByRole('heading', { name: /Pets and Visits/i })).toBeVisible();
+    await expect(page.locator('#success-message')).toBeVisible();
+
+    // Assert the deleted pet no longer appears on the page
+    await expect(page.getByText(pet.name, { exact: true })).not.toBeVisible();
   });
 
   test('validates pet type selection and birth date format', async ({ page }) => {

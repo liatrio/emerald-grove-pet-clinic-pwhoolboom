@@ -203,7 +203,7 @@
 
 ---
 
-### [ ] 4.0 Playwright E2E Test — Full Delete Flow with Confirmation Screenshot
+### [x] 4.0 Playwright E2E Test — Full Delete Flow with Confirmation Screenshot
 
 **Purpose:** Implement an automated end-to-end test that exercises the complete delete pet flow: create a pet → open the confirmation modal → capture a screenshot → confirm deletion → assert the pet no longer appears on the owner details page. The screenshot is committed to the spec proofs directory as a permanent artifact.
 
@@ -214,11 +214,11 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 In `e2e-tests/tests/pages/pet-page.ts`, add two helper methods to the `PetPage` class:
+- [x] 4.1 In `e2e-tests/tests/pages/pet-page.ts`, add two helper methods to the `PetPage` class:
   - `async clickDeletePetButton(petName: string)`: Finds the pet row containing the given pet name, then clicks the active (non-disabled) "Delete Pet" button within that row. Use `page.locator('tr').filter({ has: page.locator('dd', { hasText: petName }) })` to find the correct row.
   - `async confirmDeletion()`: Waits for the Bootstrap modal to be visible (`#deletePetModal.show` or by role `dialog`), then clicks the "Confirm Delete" button inside it.
-- [ ] 4.2 Create the proofs output directory so Playwright can write to it. The directory `docs/specs/05-spec-delete-pet/05-proofs/` already exists (created during spec setup), but verify it is present before running the test.
-- [ ] 4.3 In `e2e-tests/tests/features/pet-management.spec.ts`, add a new test inside the existing `test.describe('Pet Management', ...)` block:
+- [x] 4.2 Create the proofs output directory so Playwright can write to it. The directory `docs/specs/05-spec-delete-pet/05-proofs/` already exists (created during spec setup), but verify it is present before running the test.
+- [x] 4.3 In `e2e-tests/tests/features/pet-management.spec.ts`, add a new test inside the existing `test.describe('Pet Management', ...)` block:
 
   ```typescript
   test('can delete a pet with no visit history and verify it is removed', async ({ page }, testInfo) => {
@@ -238,6 +238,6 @@
   ```
 
   Follow the existing test style: use `OwnerPage` to navigate, use `createPet()` for test data, use `page.screenshot()` at the modal step, and use `expect()` assertions.
-- [ ] 4.4 Run `cd e2e-tests && npm test -- --grep "Delete Pet"` with the Spring Boot app running (`./mvnw spring-boot:run` in a separate terminal). Confirm the test passes and the screenshot file is created at `docs/specs/05-spec-delete-pet/05-proofs/05-delete-pet-confirmation-modal.png`.
-- [ ] 4.5 Run the full E2E suite `cd e2e-tests && npm test` to confirm no existing tests are broken by the UI changes (delete button, modal) that were added in Task 3.0.
-- [ ] 4.6 Commit the screenshot file `docs/specs/05-spec-delete-pet/05-proofs/05-delete-pet-confirmation-modal.png` to the repository as a permanent proof artifact. Verify with `git status` that the file is tracked (not ignored).
+- [x] 4.4 Run `cd e2e-tests && npm test -- --grep "Delete Pet"` with the Spring Boot app running (`./mvnw spring-boot:run` in a separate terminal). Confirm the test passes and the screenshot file is created at `docs/specs/05-spec-delete-pet/05-proofs/05-delete-pet-confirmation-modal.png`.
+- [x] 4.5 Run the full E2E suite `cd e2e-tests && npm test` to confirm no existing tests are broken by the UI changes (delete button, modal) that were added in Task 3.0.
+- [x] 4.6 Commit the screenshot file `docs/specs/05-spec-delete-pet/05-proofs/05-delete-pet-confirmation-modal.png` to the repository as a permanent proof artifact. Verify with `git status` that the file is tracked (not ignored).

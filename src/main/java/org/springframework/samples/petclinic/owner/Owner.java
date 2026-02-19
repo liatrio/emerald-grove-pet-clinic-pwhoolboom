@@ -101,7 +101,7 @@ public class Owner extends Person {
 	}
 
 	public void removePet(Pet pet) {
-		this.pets.remove(pet);
+		this.pets.removeIf(p -> p.getId() != null && p.getId().equals(pet.getId()));
 	}
 
 	/**
