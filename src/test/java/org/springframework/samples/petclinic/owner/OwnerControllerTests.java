@@ -98,6 +98,11 @@ class OwnerControllerTests {
 			.willReturn(new PageImpl<>(List.of(george)));
 
 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(george));
+
+		given(this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(anyString(), anyString(),
+				anyString()))
+			.willReturn(Optional.empty());
+
 		Visit visit = new Visit();
 		visit.setDate(LocalDate.now());
 		george.getPet("Max").getVisits().add(visit);
@@ -121,6 +126,24 @@ class OwnerControllerTests {
 				.param("city", "London")
 				.param("telephone", "1316761638"))
 			.andExpect(status().is3xxRedirection());
+	}
+
+	@Test
+	void testProcessCreationFormDuplicateOwner() throws Exception {
+		// Arrange
+		given(this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone("Joe", "Bloggs", "1316761638"))
+			.willReturn(Optional.of(george()));
+
+		// Act & Assert
+		mockMvc
+			.perform(post("/owners/new").param("firstName", "Joe")
+				.param("lastName", "Bloggs")
+				.param("address", "123 Caramel Street")
+				.param("city", "London")
+				.param("telephone", "1316761638"))
+			.andExpect(status().isOk())
+			.andExpect(model().hasErrors())
+			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
 
 	@Test

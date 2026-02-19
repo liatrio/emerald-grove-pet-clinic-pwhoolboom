@@ -59,4 +59,16 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	 */
 	Optional<Owner> findById(Integer id);
 
+	/**
+	 * Check whether an {@link Owner} with the given first name, last name, and telephone
+	 * already exists in the data store (case-insensitive name comparison).
+	 * @param firstName the first name to match (case-insensitive)
+	 * @param lastName the last name to match (case-insensitive)
+	 * @param telephone the telephone number to match
+	 * @return an {@link Optional} containing the matching {@link Owner} if found, or an
+	 * empty {@link Optional} if not found.
+	 */
+	Optional<Owner> findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(String firstName, String lastName,
+			String telephone);
+
 }
