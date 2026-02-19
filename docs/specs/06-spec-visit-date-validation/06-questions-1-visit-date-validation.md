@@ -46,3 +46,4 @@ How thorough should the Playwright E2E test be?
 - [ ] (B) Standard — two tests: (1) submit a past date and assert error; (2) submit today's date and assert success redirect
 - [x] (C) Comprehensive — three tests: (1) past date → error; (2) today → success; (3) future date → success
 - [ ] (D) Other (describe)
+- [ ]
