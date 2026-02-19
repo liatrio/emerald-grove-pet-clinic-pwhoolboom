@@ -50,7 +50,7 @@
 
 ---
 
-### [ ] 2.0 GREEN Phase — Create UpcomingVisit DTO, VisitRepository, and UpcomingVisitsController
+### [x] 2.0 GREEN Phase — Create UpcomingVisit DTO, VisitRepository, and UpcomingVisitsController
 
 #### 2.0 Proof Artifact(s)
 
