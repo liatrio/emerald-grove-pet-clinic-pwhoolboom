@@ -83,6 +83,14 @@ class OwnerController {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		}
 
+		Optional<Owner> existingOwner = this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(
+				owner.getFirstName(), owner.getLastName(), owner.getTelephone());
+		if (existingOwner.isPresent()) {
+			result.reject("duplicate.owner",
+					"An owner with this name already exists. Please search for the existing owner.");
+			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		}
+
 		this.owners.save(owner);
 		redirectAttributes.addFlashAttribute("message", "New Owner Created");
 		return "redirect:/owners/" + owner.getId();

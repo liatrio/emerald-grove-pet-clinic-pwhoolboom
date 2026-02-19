@@ -81,7 +81,7 @@
 
 ---
 
-### [ ] 2.0 [GREEN] Implement owner create duplicate detection (repository + controller + UI + i18n)
+### [x] 2.0 [GREEN] Implement owner create duplicate detection (repository + controller + UI + i18n)
 
 #### 2.0 Proof Artifact(s)
 
@@ -90,7 +90,7 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 In `OwnerController.java`, inside `processCreationForm()`, add the duplicate check **before** the `this.owners.save(owner)` call. After the `if (result.hasErrors())` block, insert:
+- [x] 2.1 In `OwnerController.java`, inside `processCreationForm()`, add the duplicate check **before** the `this.owners.save(owner)` call. After the `if (result.hasErrors())` block, insert:
 
   ```java
   Optional<Owner> existingOwner = this.owners
@@ -105,19 +105,19 @@
 
   Add `import java.util.Optional;` if not already present at the top of the file.
 
-- [ ] 2.2 In `src/main/resources/messages/messages.properties`, add the new message key at the end of the file:
+- [x] 2.2 In `src/main/resources/messages/messages.properties`, add the new message key at the end of the file:
 
   ```properties
   duplicate.owner=An owner with this name already exists. Please search for the existing owner.
   ```
 
-- [ ] 2.3 In `src/main/resources/messages/messages_en.properties`, add the same key at the end of the file (this file already contains English overrides for recent features):
+- [x] 2.3 In `src/main/resources/messages/messages_en.properties`, add the same key at the end of the file (this file already contains English overrides for recent features):
 
   ```properties
   duplicate.owner=An owner with this name already exists. Please search for the existing owner.
   ```
 
-- [ ] 2.4 In `src/main/resources/templates/owners/createOrUpdateOwnerForm.html`, add a global error banner **inside `<body>`**, immediately before the `<h2>` heading tag:
+- [x] 2.4 In `src/main/resources/templates/owners/createOrUpdateOwnerForm.html`, add a global error banner **inside `<body>`**, immediately before the `<h2>` heading tag:
 
   ```html
   <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger" role="alert">
@@ -127,7 +127,7 @@
   </div>
   ```
 
-- [ ] 2.5 Run the full `OwnerControllerTests` suite to confirm the new test now passes and no existing tests broke:
+- [x] 2.5 Run the full `OwnerControllerTests` suite to confirm the new test now passes and no existing tests broke:
 
   ```bash
   ./mvnw test -Dtest=OwnerControllerTests
@@ -135,7 +135,7 @@
 
   Expected: all tests pass (including `testProcessCreationFormDuplicateOwner` and all pre-existing tests).
 
-- [ ] 2.6 Start the application (`./mvnw spring-boot:run`) and manually verify in a browser:
+- [x] 2.6 Start the application (`./mvnw spring-boot:run`) and manually verify in a browser:
   - Navigate to `http://localhost:8080/owners/new`
   - Create an owner (e.g., firstName=Test, lastName=Duplicate, telephone=5555555555)
   - Navigate back to `http://localhost:8080/owners/new` and submit the same first name, last name, and telephone
