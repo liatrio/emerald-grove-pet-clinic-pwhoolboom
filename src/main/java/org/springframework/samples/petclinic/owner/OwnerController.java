@@ -197,6 +197,14 @@ class OwnerController {
 			return "redirect:/owners/{ownerId}/edit";
 		}
 
+		Optional<Owner> existingOwner = this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(
+				owner.getFirstName(), owner.getLastName(), owner.getTelephone());
+		if (existingOwner.isPresent() && !Objects.equals(existingOwner.get().getId(), ownerId)) {
+			result.reject("duplicate.owner",
+					"An owner with this name already exists. Please search for the existing owner.");
+			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		}
+
 		owner.setId(ownerId);
 		this.owners.save(owner);
 		redirectAttributes.addFlashAttribute("message", "Owner Values Updated");

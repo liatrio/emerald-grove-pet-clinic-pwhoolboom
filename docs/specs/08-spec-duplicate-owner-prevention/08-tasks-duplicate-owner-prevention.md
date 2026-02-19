@@ -193,7 +193,7 @@
 
 ---
 
-### [ ] 4.0 [GREEN] Implement owner edit duplicate detection (controller only)
+### [x] 4.0 [GREEN] Implement owner edit duplicate detection (controller only)
 
 #### 4.0 Proof Artifact(s)
 
@@ -202,7 +202,7 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 In `OwnerController.java`, inside `processUpdateOwnerForm()`, add the duplicate check **after** the ID mismatch check and **before** the `owner.setId(ownerId)` call:
+- [x] 4.1 In `OwnerController.java`, inside `processUpdateOwnerForm()`, add the duplicate check **after** the ID mismatch check and **before** the `owner.setId(ownerId)` call:
 
   ```java
   Optional<Owner> existingOwner = this.owners
@@ -217,7 +217,7 @@
 
   Note: `Objects.equals` is already imported in the file.
 
-- [ ] 4.2 Run the full `OwnerControllerTests` suite to confirm the new test now passes and no existing tests broke:
+- [x] 4.2 Run the full `OwnerControllerTests` suite to confirm the new test now passes and no existing tests broke:
 
   ```bash
   ./mvnw test -Dtest=OwnerControllerTests
@@ -225,7 +225,7 @@
 
   Expected: all tests pass, including `testProcessUpdateOwnerFormDuplicateOwner`, `testProcessUpdateOwnerFormSuccess`, and `testProcessUpdateOwnerFormUnchangedSuccess`.
 
-- [ ] 4.3 Run the complete test suite to confirm no regressions:
+- [x] 4.3 Run the complete test suite to confirm no regressions:
 
   ```bash
   ./mvnw test
