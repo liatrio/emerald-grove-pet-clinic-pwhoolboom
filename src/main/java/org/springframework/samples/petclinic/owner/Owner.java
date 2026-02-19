@@ -31,6 +31,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.NotBlank;
 
@@ -45,7 +46,8 @@ import jakarta.validation.constraints.NotBlank;
  * @author Wick Dynex
  */
 @Entity
-@Table(name = "owners")
+@Table(name = "owners", uniqueConstraints = @UniqueConstraint(name = "uc_owner_name_telephone",
+		columnNames = { "first_name", "last_name", "telephone" }))
 public class Owner extends Person {
 
 	@Column(name = "address")
