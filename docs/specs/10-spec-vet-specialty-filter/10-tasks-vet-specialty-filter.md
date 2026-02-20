@@ -96,7 +96,7 @@
 
 ---
 
-### [ ] 4.0 E2E Playwright Tests: Specialty Filter User Journeys
+### [x] 4.0 E2E Playwright Tests: Specialty Filter User Journeys
 
 #### 4.0 Proof Artifact(s)
 
