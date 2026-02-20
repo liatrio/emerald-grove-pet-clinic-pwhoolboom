@@ -9,7 +9,7 @@
       <div class="liatrio-card-header">
         <h2 th:text="#{vets}">Veterinarians</h2>
         <p class="liatrio-muted" th:text="#{vets.subtitle}">A snapshot of the care team and specialties.</p>
-        <form method="get" action="/vets.html" class="form-inline mt-2">
+        <form method="get" th:action="@{/vets.html}" class="form-inline mt-2">
           <div class="form-group">
             <label for="specialty" th:text="#{vets.filter.label}" class="mr-2">Filter by specialty:</label>
             <select id="specialty" name="specialty" class="form-control form-control-sm mr-2">
