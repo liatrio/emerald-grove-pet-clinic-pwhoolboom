@@ -32,6 +32,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -87,6 +88,51 @@ class VetControllerTests {
 			.andExpect(model().attributeExists("listVets"))
 			.andExpect(view().name("vets/vetList"));
 
+	}
+
+	@Test
+	void testShowVetListHtmlNoFilter() throws Exception {
+		mockMvc.perform(get("/vets.html?page=1"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("listSpecialties"))
+			.andExpect(model().attribute("specialty", ""))
+			.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testShowVetListHtmlFilterBySpecialty() throws Exception {
+		given(this.vets.findBySpecialtyName(eq("radiology"), any(Pageable.class)))
+			.willReturn(new PageImpl<Vet>(Lists.newArrayList(helen())));
+
+		mockMvc.perform(get("/vets.html?specialty=radiology"))
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("specialty", "radiology"))
+			.andExpect(model().attributeExists("listSpecialties"))
+			.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testShowVetListHtmlFilterByNone() throws Exception {
+		given(this.vets.findWithNoSpecialties(any(Pageable.class)))
+			.willReturn(new PageImpl<Vet>(Lists.newArrayList(james())));
+
+		mockMvc.perform(get("/vets.html?specialty=none"))
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("specialty", "none"))
+			.andExpect(model().attributeExists("listSpecialties"))
+			.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testShowVetListHtmlFilterByUnknownSpecialty() throws Exception {
+		given(this.vets.findBySpecialtyName(eq("unknownXYZ"), any(Pageable.class)))
+			.willReturn(new PageImpl<Vet>(Lists.newArrayList()));
+
+		mockMvc.perform(get("/vets.html?specialty=unknownXYZ"))
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("specialty", "unknownXYZ"))
+			.andExpect(model().attribute("totalItems", 0L))
+			.andExpect(view().name("vets/vetList"));
 	}
 
 	@Test

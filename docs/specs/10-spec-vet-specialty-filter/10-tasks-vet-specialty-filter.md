@@ -52,7 +52,7 @@
 
 ---
 
-### [ ] 2.0 Controller: Accept `specialty` Param and Route to Filtered Queries
+### [x] 2.0 Controller: Accept `specialty` Param and Route to Filtered Queries
 
 #### 2.0 Proof Artifact(s)
 
