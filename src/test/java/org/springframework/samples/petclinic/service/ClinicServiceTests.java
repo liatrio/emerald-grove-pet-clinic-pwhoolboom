@@ -279,6 +279,26 @@ class ClinicServiceTests {
 	}
 
 	@Test
+	void shouldFindVetsBySpecialtyName() {
+		Page<Vet> results = this.vets.findBySpecialtyName("radiology", Pageable.unpaged());
+		assertThat(results).hasSize(2);
+		assertThat(results.getContent()).extracting(Vet::getLastName).containsExactlyInAnyOrder("Leary", "Stevens");
+	}
+
+	@Test
+	void shouldFindVetsWithNoSpecialties() {
+		Page<Vet> results = this.vets.findWithNoSpecialties(Pageable.unpaged());
+		assertThat(results).hasSize(2);
+		assertThat(results.getContent()).extracting(Vet::getLastName).containsExactlyInAnyOrder("Carter", "Jenkins");
+	}
+
+	@Test
+	void shouldReturnEmptyPageForUnknownSpecialty() {
+		Page<Vet> results = this.vets.findBySpecialtyName("unknownXYZ", Pageable.unpaged());
+		assertThat(results).isEmpty();
+	}
+
+	@Test
 	void shouldFindVisitsByPetId() {
 		Optional<Owner> optionalOwner = this.owners.findById(6);
 		assertThat(optionalOwner).isPresent();
