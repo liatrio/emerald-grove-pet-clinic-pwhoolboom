@@ -15,6 +15,25 @@ export class VetPage extends BasePage {
     return this.page.locator('table#vets');
   }
 
+  specialtyFilter(): Locator {
+    return this.page.locator('select[name="specialty"]');
+  }
+
+  async filterBySpecialty(value: string): Promise<void> {
+    await this.specialtyFilter().selectOption(value);
+    await this.page.locator('form[action="/vets.html"] button[type="submit"]').click();
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  async selectedFilter(): Promise<string> {
+    return this.specialtyFilter().inputValue();
+  }
+
+  async openWithFilter(specialty: string): Promise<void> {
+    await this.goto(`/vets.html?specialty=${encodeURIComponent(specialty)}`);
+    await this.heading().waitFor();
+  }
+
   async open(): Promise<void> {
     await this.goto('/vets.html');
     await this.heading().waitFor();
