@@ -90,6 +90,31 @@
                   th:href="@{__${currentUrl}__(lang=de)}"
                   th:text="#{lang.de}">DE</a>
               </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'fa'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=fa)}"
+                  th:text="#{lang.fa}">FA</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'ko'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=ko)}"
+                  th:text="#{lang.ko}">KO</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'pt'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=pt)}"
+                  th:text="#{lang.pt}">PT</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'ru'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=ru)}"
+                  th:text="#{lang.ru}">RU</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'tr'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=tr)}"
+                  th:text="#{lang.tr}">TR</a>
+              </li>
             </ul>
           </li>
 
