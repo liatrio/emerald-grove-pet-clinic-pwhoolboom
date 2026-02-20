@@ -100,6 +100,10 @@ class OwnerControllerTests {
 		given(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class)))
 			.willReturn(new PageImpl<>(List.of(george)));
 
+		// Default stub for multi-field search: single result → redirect
+		given(this.owners.findByFilters(any(), any(), any(), any(Pageable.class)))
+			.willReturn(new PageImpl<>(List.of(george)));
+
 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(Optional.of(george));
 
 		given(this.owners.findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(anyString(), anyString(),
@@ -190,14 +194,14 @@ class OwnerControllerTests {
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
-		when(this.owners.findByLastNameStartingWith(anyString(), any(Pageable.class))).thenReturn(tasks);
+		when(this.owners.findByFilters(any(), any(), any(), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
 	}
 
 	@Test
 	void testProcessFindFormByLastName() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of(george()));
-		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(tasks);
+		when(this.owners.findByFilters(eq("Franklin"), any(), any(), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/owners/" + TEST_OWNER_ID));
@@ -206,20 +210,50 @@ class OwnerControllerTests {
 	@Test
 	void testProcessFindFormNoOwnersFound() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of());
-		when(this.owners.findByLastNameStartingWith(eq("Unknown Surname"), any(Pageable.class))).thenReturn(tasks);
+		when(this.owners.findByFilters(any(), any(), any(), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Unknown Surname"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeHasFieldErrors("owner", "lastName"))
-			.andExpect(model().attributeHasFieldErrorCode("owner", "lastName", "notFound"))
+			.andExpect(model().hasErrors())
 			.andExpect(view().name("owners/findOwners"));
+	}
 
+	@Test
+	void testProcessFindFormByTelephone() throws Exception {
+		Page<Owner> tasks = new PageImpl<>(List.of(george()));
+		when(this.owners.findByFilters(any(), eq("6085551023"), any(), any(Pageable.class))).thenReturn(tasks);
+		mockMvc.perform(get("/owners?page=1").param("telephone", "6085551023"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/owners/" + TEST_OWNER_ID));
+	}
+
+	@Test
+	void testProcessFindFormByCityPrefix() throws Exception {
+		Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
+		when(this.owners.findByFilters(any(), any(), eq("Mad"), any(Pageable.class))).thenReturn(tasks);
+		mockMvc.perform(get("/owners?page=1").param("city", "Mad"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"))
+			.andExpect(model().attributeExists("listOwners"));
+	}
+
+	@Test
+	void testProcessFindFormByAllThreeFilters() throws Exception {
+		Page<Owner> tasks = new PageImpl<>(List.of(george()));
+		when(this.owners.findByFilters(eq("Franklin"), eq("6085551023"), eq("Mad"), any(Pageable.class)))
+			.thenReturn(tasks);
+		mockMvc
+			.perform(get("/owners?page=1").param("lastName", "Franklin")
+				.param("telephone", "6085551023")
+				.param("city", "Mad"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/owners/" + TEST_OWNER_ID));
 	}
 
 	@Test
 	void testPaginationModelIncludesLastNameWhenFilterActive() throws Exception {
 		// Arrange
 		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
-		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(multiPage);
+		when(this.owners.findByFilters(eq("Franklin"), any(), any(), any(Pageable.class))).thenReturn(multiPage);
 
 		// Act & Assert
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
@@ -232,7 +266,7 @@ class OwnerControllerTests {
 	void testPaginationModelHasNullLastNameWhenNoFilterActive() throws Exception {
 		// Arrange
 		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
-		when(this.owners.findByLastNameStartingWith(eq(""), any(Pageable.class))).thenReturn(multiPage);
+		when(this.owners.findByFilters(any(), any(), any(), any(Pageable.class))).thenReturn(multiPage);
 
 		// Act & Assert
 		mockMvc.perform(get("/owners?page=1"))
@@ -245,12 +279,73 @@ class OwnerControllerTests {
 	void testPaginationLinksIncludeLastNameWhenFilterActive() throws Exception {
 		// Arrange
 		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
-		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(multiPage);
+		when(this.owners.findByFilters(eq("Franklin"), any(), any(), any(Pageable.class))).thenReturn(multiPage);
 
 		// Act & Assert
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("lastName=Franklin")));
+	}
+
+	@Test
+	void testProcessFindFormInvalidTelephone() throws Exception {
+		mockMvc.perform(get("/owners?page=1").param("telephone", "123"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeHasFieldErrors("owner", "telephone"))
+			.andExpect(model().attributeHasFieldErrorCode("owner", "telephone", "telephone.invalid"))
+			.andExpect(view().name("owners/findOwners"));
+	}
+
+	@Test
+	void testProcessFindFormEmptyTelephoneNoError() throws Exception {
+		Page<Owner> empty = new PageImpl<>(List.of());
+		when(this.owners.findByFilters(any(), any(), any(), any(Pageable.class))).thenReturn(empty);
+		mockMvc.perform(get("/owners?page=1"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeDoesNotExist("owner.telephone"))
+			.andExpect(view().name("owners/findOwners"));
+	}
+
+	@Test
+	void testProcessFindFormValidTelephoneNoError() throws Exception {
+		mockMvc.perform(get("/owners?page=1").param("telephone", "6085551023")).andExpect(status().is3xxRedirection());
+	}
+
+	@Test
+	void testPaginationModelIncludesTelephoneWhenFilterActive() throws Exception {
+		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
+		when(this.owners.findByFilters(any(), eq("6085551023"), any(), any(Pageable.class))).thenReturn(multiPage);
+
+		mockMvc.perform(get("/owners?page=1").param("telephone", "6085551023"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"))
+			.andExpect(model().attribute("telephone", "6085551023"));
+	}
+
+	@Test
+	void testPaginationModelIncludesCityWhenFilterActive() throws Exception {
+		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
+		when(this.owners.findByFilters(any(), any(), eq("Mad"), any(Pageable.class))).thenReturn(multiPage);
+
+		mockMvc.perform(get("/owners?page=1").param("city", "Mad"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"))
+			.andExpect(model().attribute("city", "Mad"));
+	}
+
+	@Test
+	void testPaginationLinksIncludeTelephoneAndCityWhenFiltersActive() throws Exception {
+		Page<Owner> multiPage = new PageImpl<>(List.of(george(), new Owner()), PageRequest.of(0, 5), 10);
+		when(this.owners.findByFilters(eq("Franklin"), eq("6085551023"), eq("Mad"), any(Pageable.class)))
+			.thenReturn(multiPage);
+
+		mockMvc
+			.perform(get("/owners?page=1").param("lastName", "Franklin")
+				.param("telephone", "6085551023")
+				.param("city", "Mad"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("telephone=6085551023")))
+			.andExpect(content().string(containsString("city=Mad")));
 	}
 
 	@Test

@@ -233,6 +233,52 @@ class ClinicServiceTests {
 	}
 
 	@Test
+	void shouldFindOwnersByTelephone() {
+		// Franklin's telephone from sample data
+		Page<Owner> results = this.owners.findByFilters(null, "6085551023", null, pageable);
+		assertThat(results).hasSize(1);
+		assertThat(results.getContent().get(0).getLastName()).isEqualTo("Franklin");
+
+		// Non-existent telephone
+		Page<Owner> empty = this.owners.findByFilters(null, "0000000000", null, pageable);
+		assertThat(empty).isEmpty();
+	}
+
+	@Test
+	void shouldFindOwnersByCityPrefix() {
+		// Four owners in "Madison": Franklin, McTavish, Escobito, Schroeder
+		Page<Owner> results = this.owners.findByFilters(null, null, "Mad", pageable);
+		assertThat(results.getTotalElements()).isEqualTo(4);
+
+		// "Sun P" prefix matches only Sun Prairie (Betty Davis)
+		Page<Owner> sunPrairie = this.owners.findByFilters(null, null, "Sun P", pageable);
+		assertThat(sunPrairie).hasSize(1);
+		assertThat(sunPrairie.getContent().get(0).getLastName()).isEqualTo("Davis");
+	}
+
+	@Test
+	void shouldFindOwnersByLastNameAndCity() {
+		// Davis with "Wind" prefix → Harold Davis (Windsor only, not Betty in Sun
+		// Prairie)
+		Page<Owner> results = this.owners.findByFilters("Davis", null, "Wind", pageable);
+		assertThat(results).hasSize(1);
+		assertThat(results.getContent().get(0).getFirstName()).isEqualTo("Harold");
+	}
+
+	@Test
+	void shouldFindOwnersByAllThreeFilters() {
+		Page<Owner> results = this.owners.findByFilters("Franklin", "6085551023", "Mad", pageable);
+		assertThat(results).hasSize(1);
+		assertThat(results.getContent().get(0).getLastName()).isEqualTo("Franklin");
+	}
+
+	@Test
+	void shouldReturnAllOwnersWhenNoFiltersProvided() {
+		Page<Owner> results = this.owners.findByFilters(null, null, null, pageable);
+		assertThat(results.getTotalElements()).isGreaterThanOrEqualTo(10);
+	}
+
+	@Test
 	void shouldFindVisitsByPetId() {
 		Optional<Owner> optionalOwner = this.owners.findById(6);
 		assertThat(optionalOwner).isPresent();

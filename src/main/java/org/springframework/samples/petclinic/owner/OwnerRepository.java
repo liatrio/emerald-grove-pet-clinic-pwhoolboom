@@ -20,6 +20,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * Repository class for <code>Owner</code> domain objects. All method names are compliant
@@ -70,5 +72,22 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	 */
 	Optional<Owner> findByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndTelephone(String firstName, String lastName,
 			String telephone);
+
+	/**
+	 * Retrieve {@link Owner}s from the data store matching any combination of last name
+	 * (case-insensitive prefix), telephone (exact), and city (case-insensitive prefix). A
+	 * {@code null} parameter means "no filter applied" for that field.
+	 * @param lastName case-insensitive prefix to match, or {@code null} to skip
+	 * @param telephone exact telephone to match, or {@code null} to skip
+	 * @param city case-insensitive prefix to match, or {@code null} to skip
+	 * @param pageable pagination settings
+	 * @return a {@link Page} of matching {@link Owner}s
+	 */
+	@Query("SELECT o FROM Owner o WHERE "
+			+ "(:lastName IS NULL OR LOWER(o.lastName) LIKE LOWER(CONCAT(:lastName, '%'))) AND "
+			+ "(:telephone IS NULL OR o.telephone = :telephone) AND "
+			+ "(:city IS NULL OR LOWER(o.city) LIKE LOWER(CONCAT(:city, '%')))")
+	Page<Owner> findByFilters(@Param("lastName") String lastName, @Param("telephone") String telephone,
+			@Param("city") String city, Pageable pageable);
 
 }
