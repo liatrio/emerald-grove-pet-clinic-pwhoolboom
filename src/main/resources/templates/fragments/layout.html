@@ -70,6 +70,54 @@
             <span th:text="#{error}">Error</span>
           </li>
 
+          <li class="nav-item dropdown" data-testid="lang-selector">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false" th:aria-label="#{lang.selector}"
+              th:text="${#locale.language.toUpperCase()}">EN</a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'en'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=en)}"
+                  th:text="#{lang.en}">EN</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'es'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=es)}"
+                  th:text="#{lang.es}">ES</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'de'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=de)}"
+                  th:text="#{lang.de}">DE</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'fa'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=fa)}"
+                  th:text="#{lang.fa}">FA</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'ko'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=ko)}"
+                  th:text="#{lang.ko}">KO</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'pt'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=pt)}"
+                  th:text="#{lang.pt}">PT</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'ru'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=ru)}"
+                  th:text="#{lang.ru}">RU</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:classappend="${#locale.language == 'tr'} ? ' active'"
+                  th:href="@{__${currentUrl}__(lang=tr)}"
+                  th:text="#{lang.tr}">TR</a>
+              </li>
+            </ul>
+          </li>
+
         </ul>
       </div>
     </div>
