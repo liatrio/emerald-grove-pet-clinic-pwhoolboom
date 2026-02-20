@@ -33,10 +33,10 @@
       Active filter: <strong th:text="${lastName}"></strong>
     </span>
     <span th:if="${telephone != null}" class="liatrio-active-filter">
-      Telephone: <strong th:text="${telephone}"></strong>
+      <span th:text="#{telephone}">Telephone</span>: <strong th:text="${telephone}"></strong>
     </span>
     <span th:if="${city != null}" class="liatrio-active-filter">
-      City: <strong th:text="${city}"></strong>
+      <span th:text="#{city}">City</span>: <strong th:text="${city}"></strong>
     </span>
     <span th:text="#{pages}">Pages:</span>
     <span>[</span>
