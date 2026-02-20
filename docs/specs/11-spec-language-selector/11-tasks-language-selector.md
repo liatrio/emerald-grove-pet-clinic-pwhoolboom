@@ -50,7 +50,7 @@
 
 ---
 
-### [ ] 2.0 Template: Add Bootstrap Language Selector Dropdown to Global Layout
+### [x] 2.0 Template: Add Bootstrap Language Selector Dropdown to Global Layout
 
 #### 2.0 Proof Artifact(s)
 
