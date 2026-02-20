@@ -72,7 +72,7 @@
 
 ---
 
-### [ ] 3.0 Template and i18n: Filter Dropdown, Pagination Links, and Message Keys
+### [x] 3.0 Template and i18n: Filter Dropdown, Pagination Links, and Message Keys
 
 #### 3.0 Proof Artifact(s)
 
