@@ -16,19 +16,36 @@
 package org.springframework.samples.petclinic.system;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
- * Adds {@code currentUrl} (the current request path) to every model so that Thymeleaf
- * templates can build language-switching URLs that stay on the current page.
+ * Adds {@code currentUrl} (the current request path plus any non-language query
+ * parameters) to every model so that Thymeleaf templates can build language-switching
+ * URLs that stay on the current page and preserve filters like {@code page},
+ * {@code specialty}, {@code lastName}, and {@code days}.
+ *
+ * <p>
+ * Any existing {@code lang=} parameter is stripped from the query string before appending
+ * so that the template's {@code (lang=xx)} expression does not produce duplicate
+ * parameters.
  */
 @ControllerAdvice
 class LanguageAdvice {
 
 	@ModelAttribute("currentUrl")
 	String currentUrl(HttpServletRequest request) {
-		return request.getRequestURI();
+		String uri = request.getRequestURI();
+		String queryString = request.getQueryString();
+		if (queryString == null) {
+			return uri;
+		}
+		String filtered = Arrays.stream(queryString.split("&"))
+			.filter(p -> !p.startsWith("lang="))
+			.collect(Collectors.joining("&"));
+		return filtered.isEmpty() ? uri : uri + "?" + filtered;
 	}
 
 }
