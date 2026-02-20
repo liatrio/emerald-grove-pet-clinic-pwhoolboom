@@ -73,7 +73,7 @@
 
 ---
 
-### [ ] 3.0 E2E: Playwright Tests for Language Selector
+### [x] 3.0 E2E: Playwright Tests for Language Selector
 
 #### 3.0 Proof Artifact(s)
 
@@ -81,14 +81,14 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 In `e2e-tests/tests/pages/base-page.ts`, add the following language selector helper methods to `BasePage`:
+- [x] 3.1 In `e2e-tests/tests/pages/base-page.ts`, add the following language selector helper methods to `BasePage`:
   - `languageSelectorToggle(): Locator` — returns `this.page.locator('[data-testid="lang-selector"] .dropdown-toggle')`
   - `async switchLanguage(code: string): Promise<void>` — clicks `languageSelectorToggle()` to open the dropdown, then clicks the dropdown item whose text matches the given uppercase code (e.g., `'EN'`, `'ES'`, `'DE'`): `await this.page.locator('[data-testid="lang-selector"] .dropdown-item', { hasText: code }).click()` followed by `await this.page.waitForLoadState('networkidle')`
   - `async activeLanguage(): Promise<string>` — returns the trimmed text of `languageSelectorToggle()` via `(await this.languageSelectorToggle().textContent() ?? '').trim()`
   - `async openWithLanguage(lang: string): Promise<void>` — navigates to `/?lang=${lang}` and waits for the page to be networkidle: `await this.goto(\`/?lang=\${lang}\`); await this.page.waitForLoadState('networkidle')`
-- [ ] 3.2 Replace the single placeholder test in `language-selector.spec.ts` (written in sub-task 2.1) with the following full test suite. Import `BasePage` helpers by using the existing `page` fixture; instantiate `new BasePage(page)` is not possible (it is abstract) — instead call the helper methods directly on a concrete page object such as `new VetPage(page)` which inherits from `BasePage`, or create a lightweight `HomePage` if one exists. Check `e2e-tests/tests/pages/` for an existing `home-page.ts`. If it exists, import and use `HomePage`; otherwise use `VetPage` as the concrete page for navigation helpers.
-- [ ] 3.3 Add test `language dropdown is visible and shows active language`: navigate to `/`, assert `languageSelectorToggle()` is visible, assert `activeLanguage()` returns `'EN'` (the default English locale).
-- [ ] 3.4 Add test `can switch UI language to Spanish`: navigate to `/`, call `switchLanguage('ES')`, assert `activeLanguage()` returns `'ES'`, assert the navbar contains a link whose text is `'Veterinarios'` (the Spanish translation of `#{vets}`), and assert the navbar contains a link whose text is `'Inicio'` (the Spanish translation of `#{home}`).
-- [ ] 3.5 Add test `language persists across page navigation`: call `openWithLanguage('es')` to start in Spanish, then call `goVeterinarians()` (inherited from `BasePage`) to navigate to the Vet Directory, assert `activeLanguage()` still returns `'ES'` and the page heading contains `'Veterinarios'` — confirming session persistence without a `?lang=es` param on the subsequent URL.
-- [ ] 3.6 Add test `can switch back to English`: call `openWithLanguage('es')`, call `switchLanguage('EN')`, assert `activeLanguage()` returns `'EN'`, assert the navbar link for Veterinarians shows `'Veterinarians'`. Capture a full-page screenshot using `testInfo.outputPath('e2e-lang-selector-switch.png')` to document the switching flow.
-- [ ] 3.7 Run `cd e2e-tests && npm test` and verify all 4 new tests pass and all pre-existing E2E tests continue to pass (`0 failed`). Confirm the screenshot was saved.
+- [x] 3.2 Replace the single placeholder test in `language-selector.spec.ts` (written in sub-task 2.1) with the following full test suite. Import `BasePage` helpers by using the existing `page` fixture; instantiate `new BasePage(page)` is not possible (it is abstract) — instead call the helper methods directly on a concrete page object such as `new VetPage(page)` which inherits from `BasePage`, or create a lightweight `HomePage` if one exists. Check `e2e-tests/tests/pages/` for an existing `home-page.ts`. If it exists, import and use `HomePage`; otherwise use `VetPage` as the concrete page for navigation helpers.
+- [x] 3.3 Add test `language dropdown is visible and shows active language`: navigate to `/`, assert `languageSelectorToggle()` is visible, assert `activeLanguage()` returns `'EN'` (the default English locale).
+- [x] 3.4 Add test `can switch UI language to Spanish`: navigate to `/`, call `switchLanguage('ES')`, assert `activeLanguage()` returns `'ES'`, assert the navbar contains a link whose text is `'Veterinarios'` (the Spanish translation of `#{vets}`), and assert the navbar contains a link whose text is `'Inicio'` (the Spanish translation of `#{home}`).
+- [x] 3.5 Add test `language persists across page navigation`: call `openWithLanguage('es')` to start in Spanish, then navigate to `/vets.html` by URL (session persistence confirmed without `?lang=es` param), assert `activeLanguage()` still returns `'ES'` and the page heading contains `'Veterinarios'`.
+- [x] 3.6 Add test `can switch back to English`: call `openWithLanguage('es')`, call `switchLanguage('EN')`, assert `activeLanguage()` returns `'EN'`, assert the navbar link for Veterinarians shows `'Veterinarians'`. Capture a full-page screenshot using `testInfo.outputPath('e2e-lang-selector-switch.png')` to document the switching flow.
+- [x] 3.7 Run `cd e2e-tests && npm test` and verify all 4 new tests pass and all pre-existing E2E tests continue to pass (`0 failed`). Confirm the screenshot was saved.
