@@ -31,8 +31,8 @@ import org.springframework.context.annotation.Configuration;
 class ChatConfig {
 
 	@Bean
-	ChatClient chatClient(ChatClient.Builder builder) {
-		return builder.build();
+	ChatClient chatClient(ChatClient.Builder builder, ChatTools chatTools) {
+		return builder.defaultTools(chatTools).build();
 	}
 
 	@Bean
