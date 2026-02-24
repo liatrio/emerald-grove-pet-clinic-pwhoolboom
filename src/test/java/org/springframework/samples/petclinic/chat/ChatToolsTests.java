@@ -154,6 +154,16 @@ class ChatToolsTests {
 		// Compile-time proof: VisitSummary has no address or telephone fields.
 	}
 
+	@Test
+	void getUpcomingVisitsForOwner_returnsEmptyListForNullName() {
+		assertThat(chatTools.getUpcomingVisitsForOwner(null)).isEmpty();
+	}
+
+	@Test
+	void getUpcomingVisitsForOwner_returnsEmptyListForBlankName() {
+		assertThat(chatTools.getUpcomingVisitsForOwner("  ")).isEmpty();
+	}
+
 	// ---------------------------------------------------------------------------
 	// getUpcomingVisits
 	// ---------------------------------------------------------------------------

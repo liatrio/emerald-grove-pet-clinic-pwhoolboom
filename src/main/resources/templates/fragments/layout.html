@@ -206,7 +206,7 @@
        class="card border-0"
        style="background:#111111;"
        data-testid="chat-panel"
-       th:attr="data-chat-error=#{chat.error.message}">
+       th:attr="data-chat-error=#{chat.error.message},data-chat-url=@{/api/chat}">
     <div class="card-header fw-semibold py-2 border-0" style="background:#111111;color:#fff;border-bottom:1px solid #333 !important;" th:text="#{chat.panel.title}">Chat with us</div>
     <div id="chat-messages" data-testid="chat-messages"></div>
     <div class="card-footer p-2 border-0" style="background:#111111;border-top:1px solid #333 !important;">
@@ -296,7 +296,7 @@
         chatMessages.appendChild(botEl);
         scrollToBottom();
 
-        fetch('/api/chat', {
+        fetch(chatPanel.dataset.chatUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

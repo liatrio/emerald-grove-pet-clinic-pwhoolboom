@@ -19,7 +19,6 @@ package org.springframework.samples.petclinic.chat;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
@@ -54,13 +53,9 @@ class ChatService {
 
 	private final ChatMemory chatMemory;
 
-	private final int windowSize;
-
-	ChatService(ChatClient chatClient, ChatMemory chatMemory,
-			@Value("${petclinic.chat.memory.window-size}") int windowSize) {
+	ChatService(ChatClient chatClient, ChatMemory chatMemory) {
 		this.chatClient = chatClient;
 		this.chatMemory = chatMemory;
-		this.windowSize = windowSize;
 	}
 
 	Flux<String> chat(String sessionId, String message) {

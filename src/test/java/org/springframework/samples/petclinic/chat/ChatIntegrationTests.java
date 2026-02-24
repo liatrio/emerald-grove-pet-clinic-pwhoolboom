@@ -19,6 +19,7 @@ package org.springframework.samples.petclinic.chat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.testcontainers.containers.Container.ExecResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,8 @@ import org.testcontainers.ollama.OllamaContainer;
 class ChatIntegrationTests {
 
 	@Container
-	static OllamaContainer ollama = new OllamaContainer("ollama/ollama:latest");
+	static OllamaContainer ollama = new OllamaContainer(
+			System.getProperty("ollama.docker.image", "ollama/ollama:0.4.7"));
 
 	@LocalServerPort
 	int port;
@@ -63,7 +65,11 @@ class ChatIntegrationTests {
 
 	@BeforeAll
 	static void pullModel() throws Exception {
-		ollama.execInContainer("ollama", "pull", "tinyllama");
+		ExecResult result = ollama.execInContainer("ollama", "pull", "tinyllama");
+		if (result.getExitCode() != 0) {
+			throw new IllegalStateException(
+					"Ollama model pull failed (exit " + result.getExitCode() + "): " + result.getStderr());
+		}
 	}
 
 	@DynamicPropertySource

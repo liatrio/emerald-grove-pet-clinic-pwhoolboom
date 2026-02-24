@@ -75,9 +75,13 @@ class ChatTools {
 
 	@Tool(description = "Get upcoming scheduled visits for a named owner")
 	List<VisitSummary> getUpcomingVisitsForOwner(String ownerLastName) {
+		if (ownerLastName == null || ownerLastName.isBlank()) {
+			return List.of();
+		}
+		String normalized = ownerLastName.toLowerCase();
 		return visitRepository.findUpcomingVisits(LocalDate.now(), LocalDate.now().plusYears(1))
 			.stream()
-			.filter(uv -> uv.ownerName().toLowerCase().contains(ownerLastName.toLowerCase()))
+			.filter(uv -> uv.ownerName().toLowerCase().contains(normalized))
 			.map(uv -> new VisitSummary(uv.ownerName(), uv.petName(), uv.date(), uv.description()))
 			.toList();
 	}
