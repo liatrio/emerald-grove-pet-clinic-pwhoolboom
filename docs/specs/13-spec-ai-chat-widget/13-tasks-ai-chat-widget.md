@@ -68,7 +68,7 @@
 
 ---
 
-### [ ] 3.0 TDD GREEN Phase — JavaScript SSE Client and Streaming (Unit 2 + Full E2E Suite)
+### [x] 3.0 TDD GREEN Phase — JavaScript SSE Client and Streaming (Unit 2 + Full E2E Suite)
 
 #### 3.0 Proof Artifact(s)
 
@@ -80,18 +80,18 @@
 
 #### 3.0 Tasks
 
-- [ ] 3.1 In `src/main/resources/messages/messages.properties`, append the fourth key: `chat.error.message=Sorry, something went wrong. Please try again.`
-- [ ] 3.2 In each of the 7 non-English locale files, append the same key using the English value as a placeholder: `chat.error.message=Sorry, something went wrong. Please try again.`
-- [ ] 3.3 On the outer chat panel `<div>` in `layout.html`, add the Thymeleaf data attribute: `th:attr="data-chat-error=#{chat.error.message}"`. This makes the error string available to JavaScript without hardcoding English text.
-- [ ] 3.4 Run `./mvnw test -Dtest=I18nPropertiesSyncTest -q` and confirm `BUILD SUCCESS` for all 4 `chat.*` keys.
-- [ ] 3.5 In `layout.html`, add a `<script>` block immediately after the chat panel `</div>` (still before `</body>`). Initialize session ID: `const chatSessionId = sessionStorage.getItem('chatSessionId') ?? (() => { const id = crypto.randomUUID(); sessionStorage.setItem('chatSessionId', id); return id; })();`
-- [ ] 3.6 In the same `<script>` block, add a `click` event listener on the toggle button (`[data-testid="chat-toggle"]`): toggle the panel's `display` between `none` and `flex` (or `block`); update the button's `aria-expanded` attribute to match the new visibility state.
-- [ ] 3.7 Add a `submit` event listener on the chat form: prevent default; read the input value; append a `<div data-role="user">` containing the user's text to the messages area (using `textContent` not `innerHTML`); clear the input field; disable the input and send button; append a `<div data-role="bot">` with a Bootstrap spinner `<span class="spinner-border spinner-border-sm">` inside it; scroll the messages area to its bottom.
-- [ ] 3.8 Still inside the submit handler, after preparing the bot placeholder, call `fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' }, body: JSON.stringify({ message: userText, sessionId: chatSessionId }) })`.
-- [ ] 3.9 In the `fetch` `.then(response => ...)` handler: if `!response.ok`, read `chatPanel.dataset.chatError` and set it as the bot element's `textContent`, then re-enable input and return early. Otherwise, obtain `response.body.getReader()` and a `new TextDecoder()`; remove the spinner from the bot element; enter a `read()` loop that: decodes each chunk, splits on `\n`, processes lines starting with `data:` — if the value is `[DONE]` break the loop, otherwise `JSON.parse` the payload and append `payload.token` to the bot element's `textContent` using `+=`; after each token append, scroll the messages area to its bottom.
-- [ ] 3.10 In a final cleanup block (use a `try/catch/finally` pattern or call a shared `re-enable` function from both the error path and the stream-end path): re-enable the chat input and send button, and call `chatInput.focus()`.
-- [ ] 3.11 Run `cd e2e-tests && npm test -- --grep "chat"` and confirm all 5 chat tests now pass. Fix any failures before running the full suite.
-- [ ] 3.12 Run the full E2E suite with `cd e2e-tests && npm test` and confirm **0 failures** across all tests.
-- [ ] 3.13 Start the application, open `http://localhost:8080`, use the chat widget to ask "What pet types do you accept?". While the response is streaming (if using real LLM) or by adding a brief artificial delay in the JS for demonstration purposes, capture `docs/specs/13-spec-ai-chat-widget/proof/chat-streaming-response.png` showing the input disabled and a partial bot response visible.
-- [ ] 3.14 After the same exchange completes (input re-enabled, full response visible), capture `docs/specs/13-spec-ai-chat-widget/proof/chat-completed-response.png`.
-- [ ] 3.15 Copy the `e2e-chat-full-flow.png` screenshot from the Playwright test artifacts directory (`e2e-tests/test-results/artifacts/`) to `docs/specs/13-spec-ai-chat-widget/proof/e2e-chat-full-flow.png`.
+- [x] 3.1 In `src/main/resources/messages/messages.properties`, append the fourth key: `chat.error.message=Sorry, something went wrong. Please try again.`
+- [x] 3.2 In each of the 7 non-English locale files, append the same key using the English value as a placeholder: `chat.error.message=Sorry, something went wrong. Please try again.`
+- [x] 3.3 On the outer chat panel `<div>` in `layout.html`, add the Thymeleaf data attribute: `th:attr="data-chat-error=#{chat.error.message}"`. This makes the error string available to JavaScript without hardcoding English text.
+- [x] 3.4 Run `./mvnw test -Dtest=I18nPropertiesSyncTest -q` and confirm `BUILD SUCCESS` for all 4 `chat.*` keys.
+- [x] 3.5 In `layout.html`, add a `<script>` block immediately after the chat panel `</div>` (still before `</body>`). Initialize session ID: `const chatSessionId = sessionStorage.getItem('chatSessionId') ?? (() => { const id = crypto.randomUUID(); sessionStorage.setItem('chatSessionId', id); return id; })();`
+- [x] 3.6 In the same `<script>` block, add a `click` event listener on the toggle button (`[data-testid="chat-toggle"]`): toggle the panel's `display` between `none` and `flex` (or `block`); update the button's `aria-expanded` attribute to match the new visibility state.
+- [x] 3.7 Add a `submit` event listener on the chat form: prevent default; read the input value; append a `<div data-role="user">` containing the user's text to the messages area (using `textContent` not `innerHTML`); clear the input field; disable the input and send button; append a `<div data-role="bot">` with a Bootstrap spinner `<span class="spinner-border spinner-border-sm">` inside it; scroll the messages area to its bottom.
+- [x] 3.8 Still inside the submit handler, after preparing the bot placeholder, call `fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' }, body: JSON.stringify({ message: userText, sessionId: chatSessionId }) })`.
+- [x] 3.9 In the `fetch` `.then(response => ...)` handler: if `!response.ok`, read `chatPanel.dataset.chatError` and set it as the bot element's `textContent`, then re-enable input and return early. Otherwise, obtain `response.body.getReader()` and a `new TextDecoder()`; remove the spinner from the bot element; enter a `read()` loop that: decodes each chunk, splits on `\n`, processes lines starting with `data:` — if the value is `[DONE]` break the loop, otherwise `JSON.parse` the payload and append `payload.token` to the bot element's `textContent` using `+=`; after each token append, scroll the messages area to its bottom.
+- [x] 3.10 In a final cleanup block (use a `try/catch/finally` pattern or call a shared `re-enable` function from both the error path and the stream-end path): re-enable the chat input and send button, and call `chatInput.focus()`.
+- [x] 3.11 Run `cd e2e-tests && npm test -- --grep "chat"` and confirm all 5 chat tests now pass. Fix any failures before running the full suite.
+- [x] 3.12 Run the full E2E suite with `cd e2e-tests && npm test` and confirm **0 failures** across all tests.
+- [x] 3.13 Start the application, open `http://localhost:8080`, use the chat widget to ask "What pet types do you accept?". While the response is streaming (if using real LLM) or by adding a brief artificial delay in the JS for demonstration purposes, capture `docs/specs/13-spec-ai-chat-widget/proof/chat-streaming-response.png` showing the input disabled and a partial bot response visible.
+- [x] 3.14 After the same exchange completes (input re-enabled, full response visible), capture `docs/specs/13-spec-ai-chat-widget/proof/chat-completed-response.png`.
+- [x] 3.15 Copy the `e2e-chat-full-flow.png` screenshot from the Playwright test artifacts directory (`e2e-tests/test-results/artifacts/`) to `docs/specs/13-spec-ai-chat-widget/proof/e2e-chat-full-flow.png`.

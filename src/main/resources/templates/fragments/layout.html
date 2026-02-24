@@ -203,7 +203,8 @@
 
   <div id="chat-panel"
        class="card"
-       data-testid="chat-panel">
+       data-testid="chat-panel"
+       th:attr="data-chat-error=#{chat.error.message}">
     <div class="card-header fw-semibold py-2" th:text="#{chat.panel.title}">Chat with us</div>
     <div id="chat-messages" data-testid="chat-messages"></div>
     <div class="card-footer p-2">
@@ -222,6 +223,142 @@
       </form>
     </div>
   </div>
+
+  <script>
+    (function () {
+      // Session ID — created once per browser tab and reused across page navigations
+      var chatSessionId = sessionStorage.getItem('chatSessionId');
+      if (!chatSessionId) {
+        chatSessionId = crypto.randomUUID();
+        sessionStorage.setItem('chatSessionId', chatSessionId);
+      }
+
+      var chatPanel   = document.getElementById('chat-panel');
+      var chatToggle  = document.querySelector('[data-testid="chat-toggle"]');
+      var chatMessages = document.getElementById('chat-messages');
+      var chatInput   = document.getElementById('chat-input');
+      var chatSend    = document.getElementById('chat-send');
+      var chatForm    = document.getElementById('chat-form');
+
+      function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function setStreaming(streaming) {
+        chatInput.disabled = streaming;
+        chatSend.disabled  = streaming;
+        if (!streaming) {
+          chatInput.focus();
+        }
+      }
+
+      // Toggle button — show/hide the panel
+      chatToggle.addEventListener('click', function () {
+        var visible = chatPanel.style.display !== 'none' && chatPanel.style.display !== '';
+        if (visible) {
+          chatPanel.style.display = 'none';
+          chatToggle.setAttribute('aria-expanded', 'false');
+        } else {
+          chatPanel.style.display = 'flex';
+          chatToggle.setAttribute('aria-expanded', 'true');
+          chatInput.focus();
+        }
+      });
+
+      // Form submit — send message and stream response
+      chatForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var userText = chatInput.value.trim();
+        if (!userText) { return; }
+
+        // Append user message
+        var userEl = document.createElement('div');
+        userEl.setAttribute('data-role', 'user');
+        userEl.textContent = userText;
+        chatMessages.appendChild(userEl);
+        scrollToBottom();
+
+        // Clear input and disable controls
+        chatInput.value = '';
+        setStreaming(true);
+
+        // Append bot placeholder with spinner
+        var botEl = document.createElement('div');
+        botEl.setAttribute('data-role', 'bot');
+        var spinner = document.createElement('span');
+        spinner.className = 'spinner-border spinner-border-sm';
+        spinner.setAttribute('role', 'status');
+        botEl.appendChild(spinner);
+        chatMessages.appendChild(botEl);
+        scrollToBottom();
+
+        fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'text/event-stream'
+          },
+          body: JSON.stringify({ message: userText, sessionId: chatSessionId })
+        })
+        .then(function (response) {
+          if (!response.ok) {
+            botEl.textContent = chatPanel.dataset.chatError;
+            setStreaming(false);
+            return;
+          }
+
+          // Remove spinner before first token arrives
+          botEl.textContent = '';
+
+          var reader  = response.body.getReader();
+          var decoder = new TextDecoder();
+          var buffer  = '';
+
+          function readChunk() {
+            reader.read().then(function (result) {
+              if (result.done) {
+                setStreaming(false);
+                return;
+              }
+
+              buffer += decoder.decode(result.value, { stream: true });
+              var lines = buffer.split('\n');
+              // Keep the last (possibly incomplete) line in the buffer
+              buffer = lines.pop();
+
+              for (var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+                if (!line.startsWith('data: ')) { continue; }
+                var payload = line.slice(6).trim();
+                if (payload === '[DONE]') {
+                  setStreaming(false);
+                  return;
+                }
+                try {
+                  var parsed = JSON.parse(payload);
+                  botEl.textContent += parsed.token;
+                  scrollToBottom();
+                } catch (err) {
+                  // Ignore malformed lines
+                }
+              }
+
+              readChunk();
+            }).catch(function () {
+              botEl.textContent = chatPanel.dataset.chatError;
+              setStreaming(false);
+            });
+          }
+
+          readChunk();
+        })
+        .catch(function () {
+          botEl.textContent = chatPanel.dataset.chatError;
+          setStreaming(false);
+        });
+      });
+    })();
+  </script>
 
 </body>
 

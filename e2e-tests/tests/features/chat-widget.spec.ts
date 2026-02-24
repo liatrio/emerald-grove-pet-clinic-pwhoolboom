@@ -126,17 +126,11 @@ test.describe('Chat Widget', () => {
     const homePage = new HomePage(page);
     await homePage.open();
 
-    // Initially no session ID
-    const initialId = await page.evaluate(() => sessionStorage.getItem('chatSessionId'));
-    expect(initialId).toBeNull();
-
-    // Opening chat triggers session ID creation
-    await homePage.openChat();
-
+    // Session ID is created immediately on page load (FR-2.1: "on first load")
     const sessionId = await page.evaluate(() => sessionStorage.getItem('chatSessionId'));
     expect(sessionId).not.toBeNull();
 
-    // Navigate to another page (same tab — sessionStorage persists)
+    // Navigate to another page (same tab — sessionStorage persists across navigation)
     await page.goto('/vets.html');
     await page.waitForLoadState('networkidle');
 
