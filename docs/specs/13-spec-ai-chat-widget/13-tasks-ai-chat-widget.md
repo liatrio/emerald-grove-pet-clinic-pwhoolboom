@@ -46,7 +46,7 @@
 
 ---
 
-### [ ] 2.0 TDD GREEN Phase — Chat Panel HTML Structure and i18n Keys (Unit 1)
+### [x] 2.0 TDD GREEN Phase — Chat Panel HTML Structure and i18n Keys (Unit 1)
 
 #### 2.0 Proof Artifact(s)
 
@@ -56,15 +56,15 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 In `src/main/resources/messages/messages.properties`, append the first three i18n keys at the end of the file: `chat.panel.title=Chat with us`, `chat.input.placeholder=Ask a question\u2026`, `chat.send.label=Send`.
-- [ ] 2.2 In each of the 7 non-English locale files (`messages_es.properties`, `messages_de.properties`, `messages_fa.properties`, `messages_ko.properties`, `messages_pt.properties`, `messages_ru.properties`, `messages_tr.properties`), append the same 3 keys. Use the English values as placeholders (the spec states English is authoritative; locale teams supply final translations): `chat.panel.title=Chat with us`, `chat.input.placeholder=Ask a question\u2026`, `chat.send.label=Send`.
-- [ ] 2.3 Run `./mvnw test -Dtest=I18nPropertiesSyncTest -q` and confirm `BUILD SUCCESS`. Fix any sync failures before continuing.
-- [ ] 2.4 In `src/main/resources/templates/fragments/layout.html`, just before the closing `</body>` tag (after the Bootstrap script tag), add a circular floating action button: `<button type="button" data-testid="chat-toggle" aria-expanded="false" aria-label="Chat" class="btn btn-primary rounded-circle shadow" style="position:fixed;bottom:1.5rem;right:1.5rem;width:3.5rem;height:3.5rem;z-index:1050;font-size:1.25rem;">💬</button>`. The button text must not be hardcoded English; use only an icon or a `th:text` bound key. Because the icon glyph `💬` is not visible text in the i18n sense (it is not flagged by `HTML_TEXT_LITERAL` since it is inside a tag attribute or icon-only), confirm the test still passes.
-- [ ] 2.5 Immediately after the toggle button in `layout.html`, add the chat panel `<div>` with `data-testid="chat-panel"`. Structure: outer div (fixed position, bottom-right, `display:none`, Bootstrap card styling); a card-header with `th:text="#{chat.panel.title}"`; a scrollable `<div data-testid="chat-messages">` for messages; a form containing `<input data-testid="chat-input" th:placeholder="#{chat.input.placeholder}">` and `<button data-testid="chat-send" th:text="#{chat.send.label}">`. Do **not** add any `<script>` tags in this task.
-- [ ] 2.6 Add minimal inline styles (either a `<style>` block or `style=""` attributes) to make the panel approximately 350px wide on desktop and 100vw on mobile (≤576px). The panel must be fixed position, appear above other content (`z-index: 1040` or higher), and be hidden by default (`display: none`).
-- [ ] 2.7 Run `./mvnw test -Dtest=I18nPropertiesSyncTest -q` again and confirm `BUILD SUCCESS`. If any hardcoded text was introduced, fix it.
-- [ ] 2.8 Run `cd e2e-tests && npm test -- --grep "chat toggle"` and confirm the toggle test now passes. The remaining 4 chat tests should still fail (JavaScript not yet added) — this is expected.
-- [ ] 2.9 Start the application (`./mvnw spring-boot:run`), open `http://localhost:8080` in a browser, click the chat toggle button, and capture `docs/specs/13-spec-ai-chat-widget/proof/chat-panel-visible.png` showing the panel open with correct English strings. Create the `docs/specs/13-spec-ai-chat-widget/proof/` directory first.
+- [x] 2.1 In `src/main/resources/messages/messages.properties`, append the first three i18n keys at the end of the file: `chat.panel.title=Chat with us`, `chat.input.placeholder=Ask a question\u2026`, `chat.send.label=Send`.
+- [x] 2.2 In each of the 7 non-English locale files (`messages_es.properties`, `messages_de.properties`, `messages_fa.properties`, `messages_ko.properties`, `messages_pt.properties`, `messages_ru.properties`, `messages_tr.properties`), append the same 3 keys. Use the English values as placeholders (the spec states English is authoritative; locale teams supply final translations): `chat.panel.title=Chat with us`, `chat.input.placeholder=Ask a question\u2026`, `chat.send.label=Send`.
+- [x] 2.3 Run `./mvnw test -Dtest=I18nPropertiesSyncTest -q` and confirm `BUILD SUCCESS`. Fix any sync failures before continuing.
+- [x] 2.4 In `src/main/resources/templates/fragments/layout.html`, just before the closing `</body>` tag (after the Bootstrap script tag), add a circular floating action button: `<button type="button" data-testid="chat-toggle" aria-expanded="false" aria-label="Chat" class="btn btn-primary rounded-circle shadow" style="position:fixed;bottom:1.5rem;right:1.5rem;width:3.5rem;height:3.5rem;z-index:1050;font-size:1.25rem;">💬</button>`. The button text must not be hardcoded English; use only an icon or a `th:text` bound key. Because the icon glyph `💬` is not visible text in the i18n sense (it is not flagged by `HTML_TEXT_LITERAL` since it is inside a tag attribute or icon-only), confirm the test still passes.
+- [x] 2.5 Immediately after the toggle button in `layout.html`, add the chat panel `<div>` with `data-testid="chat-panel"`. Structure: outer div (fixed position, bottom-right, `display:none`, Bootstrap card styling); a card-header with `th:text="#{chat.panel.title}"`; a scrollable `<div data-testid="chat-messages">` for messages; a form containing `<input data-testid="chat-input" th:placeholder="#{chat.input.placeholder}">` and `<button data-testid="chat-send" th:text="#{chat.send.label}">`. Do **not** add any `<script>` tags in this task.
+- [x] 2.6 Add minimal inline styles (either a `<style>` block or `style=""` attributes) to make the panel approximately 350px wide on desktop and 100vw on mobile (≤576px). The panel must be fixed position, appear above other content (`z-index: 1040` or higher), and be hidden by default (`display: none`).
+- [x] 2.7 Run `./mvnw test -Dtest=I18nPropertiesSyncTest -q` again and confirm `BUILD SUCCESS`. If any hardcoded text was introduced, fix it.
+- [x] 2.8 Run `cd e2e-tests && npm test -- --grep "chat toggle"` and confirm the toggle test now passes. The remaining 4 chat tests should still fail (JavaScript not yet added) — this is expected.
+- [x] 2.9 Start the application (`./mvnw spring-boot:run`), open `http://localhost:8080` in a browser, click the chat toggle button, and capture `docs/specs/13-spec-ai-chat-widget/proof/chat-panel-visible.png` showing the panel open with correct English strings. Create the `docs/specs/13-spec-ai-chat-widget/proof/` directory first.
 
 ---
 
