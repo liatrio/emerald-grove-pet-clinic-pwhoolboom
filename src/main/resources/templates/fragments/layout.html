@@ -157,7 +157,7 @@
       flex: 1;
       overflow-y: auto;
       padding: .75rem;
-      background: #f8f9fa;
+      background: #1a1a1a;
       display: flex;
       flex-direction: column;
       gap: .5rem;
@@ -166,7 +166,7 @@
     }
     #chat-messages [data-role="user"] {
       align-self: flex-end;
-      background: #0d6efd;
+      background: #24AE1D;
       color: #fff;
       padding: .4rem .75rem;
       border-radius: 1rem 1rem 0 1rem;
@@ -175,8 +175,9 @@
     }
     #chat-messages [data-role="bot"] {
       align-self: flex-start;
-      background: #fff;
-      border: 1px solid #dee2e6;
+      background: #2d2d2d;
+      border: 1px solid #444;
+      color: #e8e8e8;
       padding: .4rem .75rem;
       border-radius: 1rem 1rem 1rem 0;
       max-width: 80%;
@@ -196,28 +197,31 @@
           data-testid="chat-toggle"
           aria-expanded="false"
           th:aria-label="#{chat.panel.title}"
-          class="btn btn-primary rounded-circle shadow"
-          style="position:fixed;bottom:1.5rem;right:1.5rem;width:3.5rem;height:3.5rem;z-index:1050;font-size:1.25rem;line-height:1;">
+          class="btn rounded-circle shadow"
+          style="position:fixed;bottom:1.5rem;right:1.5rem;width:3.5rem;height:3.5rem;z-index:1050;font-size:1.25rem;line-height:1;background:#24AE1D;color:#fff;border:none;">
     &#128172;
   </button>
 
   <div id="chat-panel"
-       class="card"
+       class="card border-0"
+       style="background:#111111;"
        data-testid="chat-panel"
        th:attr="data-chat-error=#{chat.error.message}">
-    <div class="card-header fw-semibold py-2" th:text="#{chat.panel.title}">Chat with us</div>
+    <div class="card-header fw-semibold py-2 border-0" style="background:#111111;color:#fff;border-bottom:1px solid #333 !important;" th:text="#{chat.panel.title}">Chat with us</div>
     <div id="chat-messages" data-testid="chat-messages"></div>
-    <div class="card-footer p-2">
+    <div class="card-footer p-2 border-0" style="background:#111111;border-top:1px solid #333 !important;">
       <form id="chat-form" class="d-flex gap-2">
         <input id="chat-input"
                type="text"
-               class="form-control form-control-sm"
+               class="form-control form-control-sm border-secondary"
+               style="background:#2d2d2d;color:#e8e8e8;"
                data-testid="chat-input"
                th:placeholder="#{chat.input.placeholder}"
                autocomplete="off" />
         <button id="chat-send"
                 type="submit"
-                class="btn btn-primary btn-sm"
+                class="btn btn-sm"
+                style="background:#24AE1D;color:#fff;border:none;"
                 data-testid="chat-send"
                 th:text="#{chat.send.label}">Send</button>
       </form>
