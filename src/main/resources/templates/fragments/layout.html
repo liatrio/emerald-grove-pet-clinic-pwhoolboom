@@ -332,8 +332,8 @@
 
               for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
-                if (!line.startsWith('data: ')) { continue; }
-                var payload = line.slice(6).trim();
+                if (!line.startsWith('data:')) { continue; }
+                var payload = line.slice(5).trim();
                 if (payload === '[DONE]') {
                   setStreaming(false);
                   return;
