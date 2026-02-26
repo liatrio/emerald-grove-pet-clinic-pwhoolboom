@@ -28,6 +28,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.samples.petclinic.security.OwnerAuthenticationSuccessHandler;
+import org.springframework.samples.petclinic.security.UserRepository;
+import org.springframework.samples.petclinic.security.WebMvcTestSecurityConfig;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,6 +51,8 @@ import org.junit.jupiter.api.Nested;
 @WebMvcTest(VisitController.class)
 @DisabledInNativeImage
 @DisabledInAotMode
+@WithMockUser
+@Import(WebMvcTestSecurityConfig.class)
 class VisitControllerTests {
 
 	private static final int TEST_OWNER_ID = 1;
@@ -57,6 +64,12 @@ class VisitControllerTests {
 
 	@MockitoBean
 	private OwnerRepository owners;
+
+	@MockitoBean
+	private UserRepository userRepository;
+
+	@MockitoBean
+	private OwnerAuthenticationSuccessHandler ownerAuthenticationSuccessHandler;
 
 	@BeforeEach
 	void init() {

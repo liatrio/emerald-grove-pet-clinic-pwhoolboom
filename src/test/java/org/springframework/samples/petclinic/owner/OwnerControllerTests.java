@@ -55,6 +55,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.springframework.samples.petclinic.security.Role;
+import org.springframework.samples.petclinic.security.User;
+import org.springframework.context.annotation.Import;
+import org.springframework.samples.petclinic.security.OwnerAuthenticationSuccessHandler;
+import org.springframework.samples.petclinic.security.UserRepository;
+import org.springframework.samples.petclinic.security.WebMvcTestSecurityConfig;
+import org.springframework.security.test.context.support.WithMockUser;
+
 /**
  * Test class for {@link OwnerController}
  *
@@ -64,6 +72,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(OwnerController.class)
 @DisabledInNativeImage
 @DisabledInAotMode
+@WithMockUser
+@Import(WebMvcTestSecurityConfig.class)
 class OwnerControllerTests {
 
 	private static final int TEST_OWNER_ID = 1;
@@ -73,6 +83,12 @@ class OwnerControllerTests {
 
 	@MockitoBean
 	private OwnerRepository owners;
+
+	@MockitoBean
+	private UserRepository userRepository;
+
+	@MockitoBean
+	private OwnerAuthenticationSuccessHandler ownerAuthenticationSuccessHandler;
 
 	private Owner george() {
 		Owner george = new Owner();
@@ -521,6 +537,121 @@ class OwnerControllerTests {
 			.andExpect(status().isOk())
 			.andExpect(content().contentTypeCompatibleWith("text/csv"))
 			.andExpect(content().string("id,firstName,lastName,address,city,telephone\n"));
+	}
+
+	// ---------------------------------------------------------------------------
+	// Access control: OWNER role
+	// ---------------------------------------------------------------------------
+
+	@Test
+	@WithMockUser(username = "george.franklin@petclinic.com", roles = "OWNER")
+	void testShowOwner_ownerAccessingOwnProfile_returns200() throws Exception {
+		User georgeUser = new User();
+		georgeUser.setEmail("george.franklin@petclinic.com");
+		georgeUser.setRole(Role.OWNER);
+		georgeUser.setOwner(george());
+		given(userRepository.findByEmail("george.franklin@petclinic.com")).willReturn(Optional.of(georgeUser));
+
+		mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID)).andExpect(status().isOk());
+	}
+
+	@Test
+	@WithMockUser(username = "george.franklin@petclinic.com", roles = "OWNER")
+	void testShowOwner_ownerAccessingOtherOwnerProfile_returns403() throws Exception {
+		User georgeUser = new User();
+		georgeUser.setEmail("george.franklin@petclinic.com");
+		georgeUser.setRole(Role.OWNER);
+		georgeUser.setOwner(george());
+		given(userRepository.findByEmail("george.franklin@petclinic.com")).willReturn(Optional.of(georgeUser));
+
+		Owner betty = new Owner();
+		betty.setId(2);
+		given(this.owners.findById(2)).willReturn(Optional.of(betty));
+
+		mockMvc.perform(get("/owners/{ownerId}", 2)).andExpect(status().isForbidden());
+	}
+
+	@Test
+	@WithMockUser(username = "george.franklin@petclinic.com", roles = "OWNER")
+	void testInitUpdateOwnerForm_ownerAccessingOtherOwner_returns403() throws Exception {
+		User georgeUser = new User();
+		georgeUser.setEmail("george.franklin@petclinic.com");
+		georgeUser.setRole(Role.OWNER);
+		georgeUser.setOwner(george());
+		given(userRepository.findByEmail("george.franklin@petclinic.com")).willReturn(Optional.of(georgeUser));
+
+		Owner betty = new Owner();
+		betty.setId(2);
+		given(this.owners.findById(2)).willReturn(Optional.of(betty));
+
+		mockMvc.perform(get("/owners/{ownerId}/edit", 2)).andExpect(status().isForbidden());
+	}
+
+	@Test
+	@WithMockUser(username = "george.franklin@petclinic.com", roles = "OWNER")
+	void testProcessFindForm_ownerRoleUser_seesOnlyOwnRecord() throws Exception {
+		User georgeUser = new User();
+		georgeUser.setEmail("george.franklin@petclinic.com");
+		georgeUser.setRole(Role.OWNER);
+		georgeUser.setOwner(george());
+		given(userRepository.findByEmail("george.franklin@petclinic.com")).willReturn(Optional.of(georgeUser));
+
+		Owner betty = new Owner();
+		betty.setId(2);
+		betty.setFirstName("Betty");
+		betty.setLastName("Davis");
+		Page<Owner> allOwners = new PageImpl<>(List.of(george(), betty), PageRequest.of(0, 5), 2);
+		when(this.owners.findByFilters(any(), any(), any(), any(Pageable.class))).thenReturn(allOwners);
+
+		mockMvc.perform(get("/owners?page=1"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/owners/" + TEST_OWNER_ID));
+	}
+
+	// ---------------------------------------------------------------------------
+	// Access control: ADMIN role
+	// ---------------------------------------------------------------------------
+
+	@Test
+	@WithMockUser(username = "admin@petclinic.com", roles = "ADMIN")
+	void testShowOwner_adminAccessesAnyProfile_returns200() throws Exception {
+		User adminUser = new User();
+		adminUser.setEmail("admin@petclinic.com");
+		adminUser.setRole(Role.ADMIN);
+		given(userRepository.findByEmail("admin@petclinic.com")).willReturn(Optional.of(adminUser));
+
+		mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID)).andExpect(status().isOk());
+	}
+
+	@Test
+	@WithMockUser(username = "admin@petclinic.com", roles = "ADMIN")
+	void testShowOwner_canEditIsFalseForAdmin() throws Exception {
+		User adminUser = new User();
+		adminUser.setEmail("admin@petclinic.com");
+		adminUser.setRole(Role.ADMIN);
+		given(userRepository.findByEmail("admin@petclinic.com")).willReturn(Optional.of(adminUser));
+
+		mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID))
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("canEdit", false));
+	}
+
+	@Test
+	@WithMockUser(username = "admin@petclinic.com", roles = "ADMIN")
+	void testProcessFindForm_adminSeesAllOwners() throws Exception {
+		User adminUser = new User();
+		adminUser.setEmail("admin@petclinic.com");
+		adminUser.setRole(Role.ADMIN);
+		given(userRepository.findByEmail("admin@petclinic.com")).willReturn(Optional.of(adminUser));
+
+		Owner betty = new Owner();
+		betty.setId(2);
+		betty.setFirstName("Betty");
+		betty.setLastName("Davis");
+		Page<Owner> allOwners = new PageImpl<>(List.of(george(), betty), PageRequest.of(0, 5), 2);
+		when(this.owners.findByFilters(any(), any(), any(), any(Pageable.class))).thenReturn(allOwners);
+
+		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
 	}
 
 }
