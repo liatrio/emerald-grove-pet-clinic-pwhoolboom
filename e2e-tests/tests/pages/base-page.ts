@@ -51,4 +51,42 @@ export abstract class BasePage {
     await this.goto(`/?lang=${lang}`);
     await this.page.waitForLoadState('networkidle');
   }
+
+  // --- ChatWidget locators ---
+
+  chatToggle(): Locator {
+    return this.page.locator('[data-testid="chat-toggle"]');
+  }
+
+  chatPanel(): Locator {
+    return this.page.locator('[data-testid="chat-panel"]');
+  }
+
+  chatMessages(): Locator {
+    return this.page.locator('[data-testid="chat-messages"]');
+  }
+
+  chatInput(): Locator {
+    return this.page.locator('[data-testid="chat-input"]');
+  }
+
+  chatSend(): Locator {
+    return this.page.locator('[data-testid="chat-send"]');
+  }
+
+  lastBotMessage(): Locator {
+    return this.page.locator('[data-role="bot"]').last();
+  }
+
+  // --- ChatWidget actions ---
+
+  async openChat(): Promise<void> {
+    await this.chatToggle().click();
+    await this.chatPanel().waitFor({ state: 'visible' });
+  }
+
+  async sendMessage(text: string): Promise<void> {
+    await this.chatInput().fill(text);
+    await this.chatSend().click();
+  }
 }
