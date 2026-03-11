@@ -229,7 +229,7 @@
 
 ---
 
-### [ ] 4.0 Compose Dev Environment and Validate Full Plan
+### [x] 4.0 Compose Dev Environment and Validate Full Plan
 
 #### 4.0 Proof Artifact(s)
 
@@ -238,9 +238,9 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 Create the directory `infra/envs/dev/`.
+- [x] 4.1 Create the directory `infra/envs/dev/`.
 
-- [ ] 4.2 Create `infra/envs/dev/providers.tf`:
+- [x] 4.2 Create `infra/envs/dev/providers.tf`:
 
   ```hcl
   terraform {
@@ -262,7 +262,7 @@
   }
   ```
 
-- [ ] 4.3 Create `infra/envs/dev/backend.tf`:
+- [x] 4.3 Create `infra/envs/dev/backend.tf`:
 
   ```hcl
   terraform {
@@ -276,12 +276,12 @@
   }
   ```
 
-- [ ] 4.4 Create `infra/envs/dev/variables.tf` declaring:
+- [x] 4.4 Create `infra/envs/dev/variables.tf` declaring:
   - `aws_region` — type `string`, default `"us-east-1"`
   - `project_name` — type `string`, required, description `"Team/project name used in resource naming"`
   - `aws_account_id` — type `number`, required, description `"AWS account ID"`
 
-- [ ] 4.5 Create `infra/envs/dev/main.tf` calling all three modules. The dependency order is: **ECR** and **Fargate** have no dependency on each other; **RDS** depends on the Fargate module output `ecs_tasks_security_group_id`. Use the following module blocks:
+- [x] 4.5 Create `infra/envs/dev/main.tf` calling all three modules. The dependency order is: **ECR** and **Fargate** have no dependency on each other; **RDS** depends on the Fargate module output `ecs_tasks_security_group_id`. Use the following module blocks:
 
   ```hcl
   module "ecr" {
@@ -320,15 +320,15 @@
   }
   ```
 
-- [ ] 4.6 Create `infra/envs/dev/outputs.tf` declaring:
+- [x] 4.6 Create `infra/envs/dev/outputs.tf` declaring:
   - `ecr_repository_url` — value: `module.ecr.repository_url`, description `"ECR repository URL for pushing images"`
   - `alb_dns_name` — value: `module.fargate.alb_dns_name`, description `"ALB DNS name — use this to access the application over HTTP"`
   - `ecs_service_name` — value: `module.fargate.ecs_service_name`
   - `rds_endpoint` — value: `module.rds.rds_endpoint`
   - `cloudwatch_log_group` — value: `module.fargate.cloudwatch_log_group`
 
-- [ ] 4.7 Run `terraform init -backend=false` in `infra/envs/dev/`. This downloads the AWS and Random provider plugins and links the local modules without connecting to the S3 backend. Confirm the command completes without errors.
+- [x] 4.7 Run `terraform init -backend=false` in `infra/envs/dev/`. This downloads the AWS and Random provider plugins and links the local modules without connecting to the S3 backend. Confirm the command completes without errors.
 
-- [ ] 4.8 Run `terraform validate` in `infra/envs/dev/`. The output must be `"Success! The configuration is valid."` If there are errors, trace them back to the relevant module file and fix them before proceeding.
+- [x] 4.8 Run `terraform validate` in `infra/envs/dev/`. The output must be `"Success! The configuration is valid."` If there are errors, trace them back to the relevant module file and fix them before proceeding.
 
-- [ ] 4.9 Create the proof artifact directory `docs/specs/18-spec-terraform-infrastructure-modules/proof/`. Run `terraform plan -out=tfplan` from `infra/envs/dev/` (requires real AWS credentials and S3 backend access; pass required variables via `-var="project_name=pwhoolboom" -var="aws_account_id=<your-account-id>"`). If the backend is inaccessible, run with `-backend-config` overrides or use `terraform plan -backend=false` to validate resource graph resolution. Save the output of `terraform show tfplan` to `docs/specs/18-spec-terraform-infrastructure-modules/proof/terraform-plan-output.txt`. Before committing: replace the real AWS account ID with `<ACCOUNT_ID>` and replace any sensitive values with `<REDACTED>`.
+- [x] 4.9 Create the proof artifact directory `docs/specs/18-spec-terraform-infrastructure-modules/proof/`. Run `terraform plan -out=tfplan` from `infra/envs/dev/` (requires real AWS credentials and S3 backend access; pass required variables via `-var="project_name=pwhoolboom" -var="aws_account_id=<your-account-id>"`). If the backend is inaccessible, run with `-backend-config` overrides or use `terraform plan -backend=false` to validate resource graph resolution. Save the output of `terraform show tfplan` to `docs/specs/18-spec-terraform-infrastructure-modules/proof/terraform-plan-output.txt`. Before committing: replace the real AWS account ID with `<ACCOUNT_ID>` and replace any sensitive values with `<REDACTED>`.
