@@ -1,0 +1,37 @@
+name: Tofu Destroy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  tofu-destroy:
+    name: tofu destroy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@9d84900f3238fab8cd84ce47d658d25dd008be2f # v1.0.8
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: github-actions-tofu-destroy
+
+      - name: Tofu Init
+        working-directory: infra/envs/dev
+        run: tofu init
+
+      - name: Tofu Destroy
+        working-directory: infra/envs/dev
+        run: |
+          tofu destroy -auto-approve \
+            -var="project_name=pwhoolboom" \
+            -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}"
