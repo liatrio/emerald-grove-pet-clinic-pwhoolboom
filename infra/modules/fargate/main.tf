@@ -40,19 +40,19 @@ resource "aws_ecs_task_definition" "main" {
       secrets = [
         {
           name      = "SPRING_DATASOURCE_URL"
-          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/url"
+          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/db/url"
         },
         {
           name      = "SPRING_DATASOURCE_USERNAME"
-          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/username"
+          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/db/username"
         },
         {
           name      = "SPRING_DATASOURCE_PASSWORD"
-          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/password"
+          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/db/password"
         },
         {
           name      = "ANTHROPIC_API_KEY"
-          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/anthropic/api-key"
+          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/anthropic/api-key"
         }
       ]
     }

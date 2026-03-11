@@ -1,5 +1,5 @@
 resource "aws_ssm_parameter" "anthropic_api_key" {
-  name  = "/pet-clinic-pwhoolboom/${var.environment}/anthropic/api-key"
+  name  = "/${var.project_name}/${var.environment}/anthropic/api-key"
   type  = "SecureString"
   value = "PLACEHOLDER"
 
@@ -8,7 +8,7 @@ resource "aws_ssm_parameter" "anthropic_api_key" {
   }
 
   tags = {
-    Name        = "/pet-clinic-pwhoolboom/${var.environment}/anthropic/api-key"
+    Name        = "/${var.project_name}/${var.environment}/anthropic/api-key"
     Project     = var.project_name
     Environment = var.environment
   }
