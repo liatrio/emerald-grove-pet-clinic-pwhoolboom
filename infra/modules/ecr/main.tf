@@ -1,5 +1,5 @@
-resource "aws_ecr_repository" "pet-clinic-pwhoolboom" {
-  name                 = "pet-clinic-pwhoolboom"
+resource "aws_ecr_repository" "main" {
+  name                 = "${var.project_name}"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -7,14 +7,14 @@ resource "aws_ecr_repository" "pet-clinic-pwhoolboom" {
   }
 
   tags = {
-    Name        = "pet-clinic-pwhoolboom"
+    Name        = "${var.project_name}"
     Project     = var.project_name
     Environment = var.environment
   }
 }
 
-resource "aws_ecr_lifecycle_policy" "pet-clinic-pwhoolboom" {
-  repository = aws_ecr_repository.pet-clinic-pwhoolboom.name
+resource "aws_ecr_lifecycle_policy" "main" {
+  repository = aws_ecr_repository.main.name
 
   policy = jsonencode({
     rules = [

@@ -38,7 +38,7 @@ jobs:
         working-directory: infra/envs/dev
         run: |
           tofu plan -out=tfplan \
-            -var="project_name=pwhoolboom" \
+            -var="project_name=pet-clinic-pwhoolboom" \
             -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}"
           tofu show -json tfplan > tfplan.json
 

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "execution" {
-  name                 = "${var.project_name}-pet-clinic-execution-${var.environment}"
+  name                 = "${var.project_name}-execution-${var.environment}"
   permissions_boundary = "arn:aws:iam::${var.aws_account_id}:policy/team-permissions-boundary-v1"
 
   assume_role_policy = jsonencode({
@@ -12,6 +12,12 @@ resource "aws_iam_role" "execution" {
       }
     ]
   })
+
+  tags = {
+    Name        = "${var.project_name}-execution-${var.environment}"
+    Project     = var.project_name
+    Environment = var.environment
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "execution_ecs" {
@@ -29,14 +35,14 @@ resource "aws_iam_role_policy" "ssm_access" {
       {
         Effect   = "Allow"
         Action   = ["ssm:GetParameters", "ssm:GetParameter"]
-        Resource = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/*"
+        Resource = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/*"
       }
     ]
   })
 }
 
 resource "aws_iam_role" "task" {
-  name                 = "${var.project_name}-pet-clinic-task-${var.environment}"
+  name                 = "${var.project_name}-task-${var.environment}"
   permissions_boundary = "arn:aws:iam::${var.aws_account_id}:policy/team-permissions-boundary-v1"
 
   assume_role_policy = jsonencode({
@@ -49,6 +55,12 @@ resource "aws_iam_role" "task" {
       }
     ]
   })
+
+  tags = {
+    Name        = "${var.project_name}-task-${var.environment}"
+    Project     = var.project_name
+    Environment = var.environment
+  }
 }
 
 resource "aws_iam_role_policy" "cloudwatch_logs" {

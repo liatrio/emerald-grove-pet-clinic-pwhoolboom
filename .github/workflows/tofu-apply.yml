@@ -35,5 +35,5 @@ jobs:
         working-directory: infra/envs/dev
         run: |
           tofu apply -auto-approve \
-            -var="project_name=pwhoolboom" \
+            -var="project_name=pet-clinic-pwhoolboom" \
             -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}"

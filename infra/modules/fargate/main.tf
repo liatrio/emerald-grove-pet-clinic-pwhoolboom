@@ -1,16 +1,16 @@
 resource "aws_cloudwatch_log_group" "main" {
-  name              = "/ecs/${var.project_name}-pet-clinic/${var.environment}"
+  name              = "/ecs/${var.project_name}/${var.environment}"
   retention_in_days = 30
 
   tags = {
-    Name        = "/ecs/${var.project_name}-pet-clinic/${var.environment}"
+    Name        = "/ecs/${var.project_name}/${var.environment}"
     Project     = var.project_name
     Environment = var.environment
   }
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family                   = "${var.project_name}-pet-clinic-${var.environment}"
+  family                   = "${var.project_name}-${var.environment}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.cpu
@@ -40,19 +40,19 @@ resource "aws_ecs_task_definition" "main" {
       secrets = [
         {
           name      = "SPRING_DATASOURCE_URL"
-          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/url"
+          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/db/url"
         },
         {
           name      = "SPRING_DATASOURCE_USERNAME"
-          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/username"
+          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/db/username"
         },
         {
           name      = "SPRING_DATASOURCE_PASSWORD"
-          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/password"
+          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/db/password"
         },
         {
           name      = "ANTHROPIC_API_KEY"
-          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/anthropic/api-key"
+          valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/${var.project_name}/${var.environment}/anthropic/api-key"
         }
       ]
     }
@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_service" "main" {
-  name            = "${var.project_name}-pet-clinic-${var.environment}"
+  name            = "${var.project_name}-${var.environment}"
   cluster         = local.ecs_cluster_name
   task_definition = aws_ecs_task_definition.main.arn
   desired_count   = var.desired_count
