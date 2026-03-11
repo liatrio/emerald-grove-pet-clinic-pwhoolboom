@@ -31,4 +31,7 @@ module "rds" {
   aws_region            = var.aws_region
   aws_account_id        = var.aws_account_id
   ecs_security_group_id = module.fargate.ecs_tasks_security_group_id
+  platform_state_bucket = "terraform-state-ecs-landingzone-dev"
+  platform_state_key    = "ecs-application-landingzone/terraform.tfstate"
+  platform_state_region = "us-east-1"
 }

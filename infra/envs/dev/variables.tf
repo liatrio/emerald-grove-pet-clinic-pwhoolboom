@@ -9,6 +9,6 @@ variable "project_name" {
 }
 
 variable "aws_account_id" {
-  type        = number
+  type        = string
   description = "AWS account ID"
 }

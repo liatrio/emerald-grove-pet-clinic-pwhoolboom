@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "main" {
   container_definitions = jsonencode([
     {
       name  = "pet-clinic"
-      image = "${var.ecr_repository_url}:latest"
+      image = "${var.ecr_repository_url}:${var.image_tag}"
       portMappings = [
         {
           containerPort = var.container_port
@@ -43,11 +43,11 @@ resource "aws_ecs_task_definition" "main" {
           valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/url"
         },
         {
-          name      = "USERNAME"
+          name      = "SPRING_DATASOURCE_USERNAME"
           valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/username"
         },
         {
-          name      = "PASSWORD"
+          name      = "SPRING_DATASOURCE_PASSWORD"
           valueFrom = "arn:aws:ssm:${var.aws_region}:${var.aws_account_id}:parameter/pet-clinic-pwhoolboom/${var.environment}/db/password"
         },
         {

@@ -13,7 +13,7 @@ variable "aws_region" {
 }
 
 variable "aws_account_id" {
-  type = number
+  type = string
 }
 
 variable "container_port" {
@@ -58,6 +58,18 @@ variable "environment_variables" {
   }))
   default     = []
   description = "Environment variables to inject into the container"
+}
+
+variable "acm_certificate_arn" {
+  type        = string
+  default     = ""
+  description = "ARN of an ACM certificate for HTTPS. When set, an HTTPS listener is created on port 443."
+}
+
+variable "image_tag" {
+  type        = string
+  default     = "latest"
+  description = "Container image tag to deploy"
 }
 
 variable "platform_state_bucket" {
