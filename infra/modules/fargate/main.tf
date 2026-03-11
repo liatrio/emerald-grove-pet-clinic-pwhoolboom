@@ -1,16 +1,16 @@
 resource "aws_cloudwatch_log_group" "main" {
-  name              = "/ecs/${var.project_name}-pet-clinic/${var.environment}"
+  name              = "/ecs/${var.project_name}/${var.environment}"
   retention_in_days = 30
 
   tags = {
-    Name        = "/ecs/${var.project_name}-pet-clinic/${var.environment}"
+    Name        = "/ecs/${var.project_name}/${var.environment}"
     Project     = var.project_name
     Environment = var.environment
   }
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family                   = "${var.project_name}-pet-clinic-${var.environment}"
+  family                   = "${var.project_name}-${var.environment}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.cpu
@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_service" "main" {
-  name            = "${var.project_name}-pet-clinic-${var.environment}"
+  name            = "${var.project_name}-${var.environment}"
   cluster         = local.ecs_cluster_name
   task_definition = aws_ecs_task_definition.main.arn
   desired_count   = var.desired_count

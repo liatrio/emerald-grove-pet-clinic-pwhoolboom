@@ -1,5 +1,5 @@
 resource "aws_iam_role" "execution" {
-  name                 = "${var.project_name}-pet-clinic-execution-${var.environment}"
+  name                 = "${var.project_name}-execution-${var.environment}"
   permissions_boundary = "arn:aws:iam::${var.aws_account_id}:policy/team-permissions-boundary-v1"
 
   assume_role_policy = jsonencode({
@@ -14,7 +14,7 @@ resource "aws_iam_role" "execution" {
   })
 
   tags = {
-    Name        = "${var.project_name}-pet-clinic-execution-${var.environment}"
+    Name        = "${var.project_name}-execution-${var.environment}"
     Project     = var.project_name
     Environment = var.environment
   }
@@ -42,7 +42,7 @@ resource "aws_iam_role_policy" "ssm_access" {
 }
 
 resource "aws_iam_role" "task" {
-  name                 = "${var.project_name}-pet-clinic-task-${var.environment}"
+  name                 = "${var.project_name}-task-${var.environment}"
   permissions_boundary = "arn:aws:iam::${var.aws_account_id}:policy/team-permissions-boundary-v1"
 
   assume_role_policy = jsonencode({
@@ -57,7 +57,7 @@ resource "aws_iam_role" "task" {
   })
 
   tags = {
-    Name        = "${var.project_name}-pet-clinic-task-${var.environment}"
+    Name        = "${var.project_name}-task-${var.environment}"
     Project     = var.project_name
     Environment = var.environment
   }

@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "main" {
-  name                 = "${var.project_name}-pet-clinic"
+  name                 = "${var.project_name}"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -7,7 +7,7 @@ resource "aws_ecr_repository" "main" {
   }
 
   tags = {
-    Name        = "${var.project_name}-pet-clinic"
+    Name        = "${var.project_name}"
     Project     = var.project_name
     Environment = var.environment
   }
